@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pediatric Drug Calculator - Tanzania</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💊 Pediatric Drug Calculator</h1>
+            <p class="subtitle">Hesabu Dawa kwa Watoto - Tanzania STG</p>
+        </header>
+        
+        <div class="drug-selector">
+            <label for="drugSelect">Chagua Dawa:</label>
+            <select id="drugSelect" onchange="loadDrugData()">
+                <option value="">-- Chagua dawa --</option>
+                <option value="paracetamol">Paracetamol</option>
+                <!-- Tutaongeza dawa zaidi hapa -->
+            </select>
+        </div>
+        
+        <div id="drugInfo" class="drug-info" style="display: none;">
+            <h2 id="drugName"></h2>
+            <p id="drugCategory"></p>
+        </div>
+        
+        <form id="calculatorForm" style="display: none;">
+            <div class="input-group">
+                <label for="weight">Uzito wa Mtoto (kg):</label>
+                <input type="number" id="weight" placeholder="Weka uzito..." min="0.1" step="0.1" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="age">Umri wa Mtoto:</label>
+                <select id="age" required>
+                    <option value="">-- Chagua umri --</option>
+                    <option value="0-3m">0-3 miezi</option>
+                    <option value="3-12m">3-12 miezi</option>
+                    <option value="1-5y">1-5 miaka</option>
+                    <option value="6-12y">6-12 miaka</option>
+                </select>
+            </div>
+            
+            <button type="button" class="btn btn-calculate" onclick="calculate()">Hesabu Dozi</button>
+        </form>
+        
+        <div id="results" class="results">
+            <h3>📋 Matokeo:</h3>
+            <div id="doseResult" class="dose-result"></div>
+            <div id="warnings" class="warning"></div>
+            
+            <div class="sources" id="sources"></div>
+            
+            <button class="btn btn-print" onclick="printResults()">🖨️ Print Prescription</button>
+        </div>
+    </div>
+
+    <!-- Load modules -->
+    <script src="modules/calculator.js"></script>
+    <script src="modules/ui.js"></script>
+    
+    <!-- Main application logic -->
+    <script>
+        let currentDrugData = null;
+        
+        // Load drug data from JSON
+        async function loadDrugData() {
+            const drugSelect = document.getElementById('drugSelect');
+            const selectedDrug = drugSelect.value;
+            
+            if (!selectedDrug) {
+                document.getElementById('calculatorForm').style.display = 'none';
+                document.getElementById('drugInfo').style.display = 'none';
+                document.getElementById('results').classList.remove('show');
+                return;
+            }
+            
+            try {
+                // Fetch drug data from JSON file
+                const response = await fetch(`data/${selectedDrug}.json`);
+                currentDrugData = await response.json();
+                
+                // Display drug info
+                document.getElementById('drugName').textContent = currentDrugData.drugName;
+                document.getElementById('drugCategory').textContent = 
+                    `${currentDrugData.category} - ${currentDrugData.calculationType}`;
+                
+                document.getElementById('drugInfo').style.display = 'block';
+                document.getElementById('calculatorForm').style.display = 'block';
+                
+                // Hide previous results
+                document.getElementById('results').classList.remove('show');
+                
+            } catch (error) {
+                alert('Kuna tatizo kupata data ya dawa. Tafadhali jaribu tena.');
+                console.error('Error loading drug data:', error);
+            }
+        }
+        
+        // Calculate dosage
+        function calculate() {
+            if (!currentDrugData) {
+                alert('Tafadhali chagua dawa kwanza!');
+                return;
+            }
+            
+            // Get input values
+            const weight = parseFloat(document.getElementById('weight').value);
+            const age = document.getElementById('age').value;
+            
+            // Validate input
+            const validation = validateInput(weight, age);
+            if (!validation.valid) {
+                displayError(validation.errors.join(', '));
+                return;
+            }
+            
+            // Show loading
+            showLoading();
+            
+            // Calculate dosage
+            const result = calculateDosage(currentDrugData, weight, age);
+            
+            // Hide loading
+            hideLoading();
+            
+            // Display results or error
+            if (result.success) {
+                displayResults(result.results, currentDrugData);
+                
+                // Display sources
+                const sourcesDiv = document.getElementById('sources');
+                sourcesDiv.innerHTML = '<strong>📚 Sources:</strong><br>' + 
+                    currentDrugData.sources.map(s => 
+                        `• ${s.name} (${s.year})${s.page ? ', page ' + s.page : ''}`
+                    ).join('<br>');
+            } else {
+                displayError(result.error);
+            }
+        }
+        
+        // Print results
+        function printResults() {
+            if (!currentDrugData) return;
+            
+            const weight = document.getElementById('weight').value;
+            const age = document.getElementById('age').value;
+            
+            const result = calculateDosage(currentDrugData, weight, age);
+            if (result.success) {
+                printPrescription(result.results, currentDrugData, weight, age);
+            }
+        }
+        
+        // Allow Enter key to calculate
+        document.getElementById('weight').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculate();
+        });
+    </script>
+</body>
+</html>
