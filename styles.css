@@ -1,0 +1,210 @@
+/* GLOBAL STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* CONTAINER */
+.container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 600px;
+    width: 100%;
+    padding: 30px;
+}
+
+/* HEADER */
+header h1 {
+    color: #667eea;
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+/* DRUG SELECTOR */
+.drug-selector {
+    margin-bottom: 25px;
+}
+
+.drug-selector label {
+    display: block;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.drug-selector select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+    cursor: pointer;
+}
+
+/* DRUG INFO */
+.drug-info {
+    background: #f8f9ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border-left: 4px solid #667eea;
+}
+
+.drug-info h2 {
+    color: #667eea;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.drug-info p {
+    color: #555;
+    font-size: 13px;
+}
+
+/* FORM STYLES */
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* BUTTONS */
+.btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-print {
+    margin-top: 15px;
+    background: #4caf50;
+}
+
+/* RESULTS */
+.results {
+    margin-top: 25px;
+    padding: 20px;
+    background: #e8f5e9;
+    border-radius: 10px;
+    border-left: 4px solid #4caf50;
+    display: none;
+}
+
+.results.show {
+    display: block;
+}
+
+.results h3 {
+    color: #2e7d32;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.dose-result {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.dose-main {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.dose-main p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.dose-details p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.age-notes {
+    margin-top: 15px;
+    padding: 10px;
+    background: #e3f2fd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* WARNINGS */
+.warning {
+    background: #fff3e0;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #ff9800;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #e65100;
+}
+
+/* SOURCES */
+.sources {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f5f5f5;
+    border-radius:
