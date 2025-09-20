@@ -1,0 +1,79 @@
+{
+  "drugName": "Paracetamol",
+  "genericName": "Acetaminophen",
+  "category": "Antipyretic/Analgesic",
+  "calculationType": "weight-based",
+  
+  "inputsNeeded": ["weight", "age"],
+  
+  "dosing": {
+    "calculation": "15 mg/kg/dose",
+    "minDosePerKg": 10,
+    "maxDosePerKg": 15,
+    "maxSingleDose": 1000,
+    "maxDailyDosePerKg": 75,
+    "frequency": "every 4-6 hours",
+    "maxFrequencyPerDay": 4
+  },
+  
+  "ageRestrictions": {
+    "0-3m": {
+      "allowed": true,
+      "warning": "Use with caution. Consult senior doctor.",
+      "notes": "Prefer rectal route if available"
+    },
+    "3-12m": {
+      "allowed": true,
+      "warning": null,
+      "notes": "Standard dosing applies"
+    },
+    "1-5y": {
+      "allowed": true,
+      "warning": null,
+      "notes": "Standard dosing applies"
+    },
+    "6-12y": {
+      "allowed": true,
+      "warning": "Maximum 1g per dose",
+      "notes": "May use adult formulations"
+    }
+  },
+  
+  "contraindications": [
+    "Severe liver disease",
+    "Known hypersensitivity to paracetamol"
+  ],
+  
+  "formulations": [
+    {
+      "type": "Syrup",
+      "concentration": "120 mg/5ml",
+      "notes": "Preferred for children under 6 years"
+    },
+    {
+      "type": "Tablet",
+      "strengths": ["500mg", "1000mg"],
+      "notes": "For children who can swallow tablets"
+    },
+    {
+      "type": "Suppository",
+      "strengths": ["125mg", "250mg", "500mg"],
+      "notes": "When oral route not available"
+    }
+  ],
+  
+  "sources": [
+    {
+      "name": "STG Tanzania",
+      "year": 2023,
+      "page": "45-46"
+    },
+    {
+      "name": "WHO Essential Medicines List",
+      "year": 2023,
+      "section": "Pediatric analgesics"
+    }
+  ],
+  
+  "lastUpdated": "2025-01-15"
+}
