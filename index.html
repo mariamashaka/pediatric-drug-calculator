@@ -1,164 +1,600 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pediatric Drug Calculator - Tanzania</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Pediatric Drug Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        /* Search Box with Autocomplete */
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #667eea;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .autocomplete-dropdown.show {
+            display: block;
+        }
+        
+        .autocomplete-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .autocomplete-item:hover {
+            background: #f5f5ff;
+        }
+        
+        .autocomplete-item strong {
+            color: #667eea;
+            display: block;
+        }
+        
+        .autocomplete-item small {
+            color: #666;
+        }
+        
+        /* Drug Info */
+        .drug-info {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        
+        .drug-info.show {
+            display: block;
+        }
+        
+        .drug-info h2 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .drug-info p {
+            color: #555;
+            font-size: 13px;
+        }
+        
+        /* Age Filter */
+        .age-filter {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .age-filter.show {
+            display: block;
+        }
+        
+        .age-filter label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .age-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+        }
+        
+        .age-option {
+            padding: 10px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        
+        .age-option:hover {
+            border-color: #667eea;
+        }
+        
+        .age-option.selected {
+            border-color: #667eea;
+            background: #f5f5ff;
+        }
+        
+        .age-option.newborn {
+            border-left: 4px solid #ff9800;
+        }
+        
+        .age-option .warning {
+            color: #ff9800;
+            font-size: 16px;
+        }
+        
+        /* Form */
+        .calculator-form {
+            display: none;
+        }
+        
+        .calculator-form.show {
+            display: block;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Results */
+        .results {
+            margin-top: 25px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            border-left: 4px solid #4caf50;
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .results h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .dose-result {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .dose-result p {
+            margin: 8px 0;
+        }
+        
+        .dose-result strong {
+            color: #667eea;
+        }
+        
+        .warning-box {
+            background: #fff3e0;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #e65100;
+            display: none;
+        }
+        
+        .warning-box.show {
+            display: block;
+        }
+        
+        .sources {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .btn-print {
+            margin-top: 15px;
+            background: #4caf50;
+            padding: 10px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>💊 Pediatric Drug Calculator</h1>
-            <p class="subtitle">Hesabu Dawa kwa Watoto - Tanzania STG</p>
-        </header>
+        <h1>💊 Pediatric Drug Calculator</h1>
+        <p class="subtitle">Evidence-based dosing for pediatric patients</p>
         
-        <div class="drug-selector">
-            <label for="drugSelect">Chagua Dawa:</label>
-            <select id="drugSelect" onchange="loadDrugData()">
-                <option value="">-- Chagua dawa --</option>
-                <option value="paracetamol">Paracetamol</option>
-                <!-- Tutaongeza dawa zaidi hapa -->
-            </select>
+        <!-- Search with Autocomplete -->
+        <div class="search-wrapper">
+            <input 
+                type="text" 
+                class="search-input" 
+                id="searchInput"
+                placeholder="🔍 Search drug by name (e.g., Paracetamol, Amoxicillin...)"
+                autocomplete="off"
+            >
+            <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
         </div>
         
-        <div id="drugInfo" class="drug-info" style="display: none;">
+        <!-- Drug Info -->
+        <div class="drug-info" id="drugInfo">
             <h2 id="drugName"></h2>
             <p id="drugCategory"></p>
         </div>
         
-        <form id="calculatorForm" style="display: none;">
+        <!-- Age Filter (показывается только для некоторых лекарств) -->
+        <div class="age-filter" id="ageFilter">
+            <label>⚠️ Select Patient Age Group (Important for dosing):</label>
+            <div class="age-options" id="ageOptions"></div>
+        </div>
+        
+        <!-- Calculator Form -->
+        <form class="calculator-form" id="calculatorForm">
             <div class="input-group">
-                <label for="weight">Uzito wa Mtoto (kg):</label>
-                <input type="number" id="weight" placeholder="Weka uzito..." min="0.1" step="0.1" required>
+                <label for="weight">Patient Weight (kg):</label>
+                <input type="number" id="weight" placeholder="Enter weight..." min="0.5" step="0.1" required>
             </div>
             
-            <div class="input-group">
-                <label for="age">Umri wa Mtoto:</label>
-                <select id="age" required>
-                    <option value="">-- Chagua umri --</option>
-                    <option value="0-3m">0-3 miezi</option>
-                    <option value="3-12m">3-12 miezi</option>
-                    <option value="1-5y">1-5 miaka</option>
-                    <option value="6-12y">6-12 miaka</option>
-                </select>
-            </div>
-            
-            <button type="button" class="btn btn-calculate" onclick="calculate()">Hesabu Dozi</button>
+            <button type="submit" class="btn">Calculate Dose</button>
         </form>
         
-        <div id="results" class="results">
-            <h3>📋 Matokeo:</h3>
-            <div id="doseResult" class="dose-result"></div>
-            <div id="warnings" class="warning"></div>
-            
+        <!-- Results -->
+        <div class="results" id="results">
+            <h3>📋 Dosing Results:</h3>
+            <div class="dose-result" id="doseResult"></div>
+            <div class="warning-box" id="warningBox"></div>
             <div class="sources" id="sources"></div>
-            
-            <button class="btn btn-print" onclick="printResults()">🖨️ Print Prescription</button>
+            <button class="btn btn-print" onclick="printPrescription()">🖨️ Print Prescription</button>
         </div>
     </div>
 
-    <!-- Load modules -->
-    <script src="modules/calculator.js"></script>
-    <script src="modules/ui.js"></script>
-    
-    <!-- Main application logic -->
     <script>
+        // Drug database
+        const drugs = [
+            {
+                id: 'paracetamol',
+                name: 'Paracetamol',
+                searchTerms: ['paracetamol', 'acetaminophen', 'tylenol', 'panadol'],
+                category: 'Analgesic / Antipyretic',
+                ageGroups: ['neonates', 'infants', 'toddlers', 'preschool', 'schoolAge', 'adolescent'],
+                showAgeFilter: true
+            }
+            // Add more drugs here later
+        ];
+        
+        const ageGroupsData = {
+            'neonates': { label: '👶 Newborn (0-28 days)', warning: true },
+            'infants': { label: '🍼 Infant (1-12 months)', warning: false },
+            'toddlers': { label: '🧸 Toddler (1-3 years)', warning: false },
+            'preschool': { label: '🎨 Preschool (3-6 years)', warning: false },
+            'schoolAge': { label: '📚 School Age (6-12 years)', warning: false },
+            'adolescent': { label: '🎓 Adolescent (12-18 years)', warning: false }
+        };
+        
+        let selectedDrug = null;
+        let selectedAge = null;
         let currentDrugData = null;
         
-        // Load drug data from JSON
-        async function loadDrugData() {
-            const drugSelect = document.getElementById('drugSelect');
-            const selectedDrug = drugSelect.value;
+        // Autocomplete
+        const searchInput = document.getElementById('searchInput');
+        const autocompleteDropdown = document.getElementById('autocompleteDropdown');
+        
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
             
-            if (!selectedDrug) {
-                document.getElementById('calculatorForm').style.display = 'none';
-                document.getElementById('drugInfo').style.display = 'none';
-                document.getElementById('results').classList.remove('show');
+            if (query.length < 2) {
+                autocompleteDropdown.classList.remove('show');
                 return;
             }
             
+            const matches = drugs.filter(drug => 
+                drug.searchTerms.some(term => term.includes(query))
+            );
+            
+            if (matches.length > 0) {
+                autocompleteDropdown.innerHTML = matches.map(drug => `
+                    <div class="autocomplete-item" onclick="selectDrug('${drug.id}')">
+                        <strong>${drug.name}</strong>
+                        <small>${drug.category}</small>
+                    </div>
+                `).join('');
+                autocompleteDropdown.classList.add('show');
+            } else {
+                autocompleteDropdown.innerHTML = '<div class="autocomplete-item">No drugs found</div>';
+                autocompleteDropdown.classList.add('show');
+            }
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-wrapper')) {
+                autocompleteDropdown.classList.remove('show');
+            }
+        });
+        
+        // Select drug
+        async function selectDrug(drugId) {
+            selectedDrug = drugs.find(d => d.id === drugId);
+            if (!selectedDrug) return;
+            
+            autocompleteDropdown.classList.remove('show');
+            searchInput.value = selectedDrug.name;
+            
+            // Load drug data
             try {
-                // Fetch drug data from JSON file
-                const response = await fetch(`data/${selectedDrug}.json`);
+                const response = await fetch(`data/${drugId}.json`);
                 currentDrugData = await response.json();
                 
-                // Display drug info
+                // Show drug info
                 document.getElementById('drugName').textContent = currentDrugData.drugName;
-                document.getElementById('drugCategory').textContent = 
-                    `${currentDrugData.category} - ${currentDrugData.calculationType}`;
+                document.getElementById('drugCategory').textContent = currentDrugData.category;
+                document.getElementById('drugInfo').classList.add('show');
                 
-                document.getElementById('drugInfo').style.display = 'block';
-                document.getElementById('calculatorForm').style.display = 'block';
+                // Show age filter if needed
+                if (selectedDrug.showAgeFilter) {
+                    showAgeFilter();
+                } else {
+                    document.getElementById('ageFilter').classList.remove('show');
+                    document.getElementById('calculatorForm').classList.add('show');
+                }
                 
-                // Hide previous results
                 document.getElementById('results').classList.remove('show');
                 
             } catch (error) {
-                alert('Kuna tatizo kupata data ya dawa. Tafadhali jaribu tena.');
-                console.error('Error loading drug data:', error);
+                alert('Error loading drug data. Please try again.');
+                console.error(error);
             }
         }
         
-        // Calculate dosage
-        function calculate() {
-            if (!currentDrugData) {
-                alert('Tafadhali chagua dawa kwanza!');
-                return;
-            }
+        // Show age filter
+        function showAgeFilter() {
+            const ageOptionsDiv = document.getElementById('ageOptions');
+            const ageGroups = currentDrugData.ageGroups;
             
-            // Get input values
-            const weight = parseFloat(document.getElementById('weight').value);
-            const age = document.getElementById('age').value;
-            
-            // Validate input
-            const validation = validateInput(weight, age);
-            if (!validation.valid) {
-                displayError(validation.errors.join(', '));
-                return;
-            }
-            
-            // Show loading
-            showLoading();
-            
-            // Calculate dosage
-            const result = calculateDosage(currentDrugData, weight, age);
-            
-            // Hide loading
-            hideLoading();
-            
-            // Display results or error
-            if (result.success) {
-                displayResults(result.results, currentDrugData);
+            ageOptionsDiv.innerHTML = Object.keys(ageGroups).map(ageKey => {
+                const ageData = ageGroups[ageKey];
+                const displayData = ageGroupsData[ageKey];
+                const warningIcon = ageData.cautionLevel === 'high' ? '<span class="warning">⚠️</span>' : '';
+                const newbornClass = ageKey === 'neonates' ? 'newborn' : '';
                 
-                // Display sources
-                const sourcesDiv = document.getElementById('sources');
-                sourcesDiv.innerHTML = '<strong>📚 Sources:</strong><br>' + 
-                    currentDrugData.sources.map(s => 
-                        `• ${s.name} (${s.year})${s.page ? ', page ' + s.page : ''}`
-                    ).join('<br>');
-            } else {
-                displayError(result.error);
-            }
+                return `
+                    <div class="age-option ${newbornClass}" onclick="selectAge('${ageKey}')">
+                        ${warningIcon} ${displayData.label}
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('ageFilter').classList.add('show');
+            document.getElementById('calculatorForm').classList.remove('show');
         }
         
-        // Print results
-        function printResults() {
+        // Select age
+        function selectAge(ageKey) {
+            selectedAge = ageKey;
+            
+            // Update UI
+            document.querySelectorAll('.age-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
+            // Show form
+            document.getElementById('calculatorForm').classList.add('show');
+        }
+        
+        // Calculate dose
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
             if (!currentDrugData) return;
             
-            const weight = document.getElementById('weight').value;
-            const age = document.getElementById('age').value;
+            const weight = parseFloat(document.getElementById('weight').value);
             
-            const result = calculateDosage(currentDrugData, weight, age);
-            if (result.success) {
-                printPrescription(result.results, currentDrugData, weight, age);
+            if (!weight || weight <= 0) {
+                alert('Please enter a valid weight!');
+                return;
             }
+            
+            // Determine which dosing to use
+            let dosing;
+            if (selectedAge === 'neonates' && currentDrugData.dosing.neonatal) {
+                dosing = currentDrugData.dosing.neonatal;
+            } else {
+                dosing = currentDrugData.dosing.standard;
+            }
+            
+            // Calculate
+            const dosePerKg = dosing.preferred || dosing.maxDosePerKg;
+            let calculatedDose = weight * dosePerKg;
+            
+            // Apply max
+            if (calculatedDose > dosing.maxSingleDose) {
+                calculatedDose = dosing.maxSingleDose;
+            }
+            
+            const maxDaily = weight * dosing.maxDailyDosePerKg;
+            
+            // Display results
+            displayResults(calculatedDose, maxDaily, dosing, weight);
+        });
+        
+        // Display results
+        function displayResults(dose, maxDaily, dosing, weight) {
+            const doseResultDiv = document.getElementById('doseResult');
+            const warningBox = document.getElementById('warningBox');
+            const sourcesDiv = document.getElementById('sources');
+            
+            doseResultDiv.innerHTML = `
+                <p><strong>Single Dose:</strong> ${dose.toFixed(0)} mg</p>
+                <p><strong>Frequency:</strong> ${dosing.frequency}</p>
+                <p><strong>Maximum Daily Dose:</strong> ${maxDaily.toFixed(0)} mg/day</p>
+                <p><strong>Calculation:</strong> ${weight} kg × ${dosing.preferred || dosing.maxDosePerKg} mg/kg = ${dose.toFixed(0)} mg</p>
+            `;
+            
+            // Warnings
+            const ageData = currentDrugData.ageGroups[selectedAge];
+            if (ageData && ageData.cautionLevel === 'high') {
+                warningBox.innerHTML = `<strong>⚠️ Warning:</strong> ${ageData.notes}`;
+                warningBox.classList.add('show');
+            } else {
+                warningBox.classList.remove('show');
+            }
+            
+            // Sources
+            if (currentDrugData.sources) {
+                sourcesDiv.innerHTML = '<strong>Sources:</strong><br>' + 
+                    currentDrugData.sources.map(s => 
+                        `• ${s.name} (${s.year})${s.pages ? ', pages ' + s.pages : ''}`
+                    ).join('<br>');
+            }
+            
+            document.getElementById('results').classList.add('show');
         }
         
-        // Allow Enter key to calculate
-        document.getElementById('weight').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') calculate();
-        });
+        // Print
+        function printPrescription() {
+            const weight = document.getElementById('weight').value;
+            const doseText = document.getElementById('doseResult').innerHTML;
+            const drugName = currentDrugData.drugName;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Prescription - ${drugName}</title>
+                    <style>
+                        body { font-family: Arial; padding: 20px; }
+                        h1 { color: #667eea; }
+                        .info { margin: 20px 0; }
+                        .dose { background: #f0f0f0; padding: 15px; border-radius: 5px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Pediatric Drug Calculator - Prescription</h1>
+                    <div class="info">
+                        <p><strong>Drug:</strong> ${drugName}</p>
+                        <p><strong>Patient Weight:</strong> ${weight} kg</p>
+                        <p><strong>Age Group:</strong> ${ageGroupsData[selectedAge].label}</p>
+                    </div>
+                    <div class="dose">
+                        <h3>Dosage:</h3>
+                        ${doseText}
+                    </div>
+                    <p style="margin-top: 30px; font-size: 12px;">
+                        Generated: ${new Date().toLocaleString()}<br>
+                        Pediatric Drug Calculator
+                    </p>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
     </script>
 </body>
 </html>
