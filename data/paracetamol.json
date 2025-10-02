@@ -144,38 +144,40 @@
         "mg": 120,
         "ml": 5
       },
-      "preferredFor": ["neonates", "infants", "toddlers", "preschool"],
+      "minWeight": 0.5,
+      "maxWeight": null,
+      "preferredFor": ["neonates", "infants", "toddlers", "preschool", "schoolAge"],
       "notes": "Shake well before use. Preferred for accurate dosing in children."
     },
     {
-      "type": "Syrup",
-      "concentration": "250mg/5ml",
-      "concentrationNumeric": {
-        "mg": 250,
-        "ml": 5
-      },
-      "preferredFor": ["schoolAge", "adolescent"],
-      "notes": "Higher concentration for older children"
+      "type": "Suppository",
+      "strengths": [125, 250],
+      "minWeight": 0.5,
+      "maxWeight": null,
+      "preferredFor": ["neonates", "infants", "toddlers"],
+      "notes": "When oral route not available or vomiting"
     },
     {
       "type": "Tablet",
       "strength": 500,
       "divisible": true,
+      "minWeight": 8,
+      "maxWeight": null,
       "preferredFor": ["schoolAge", "adolescent"],
-      "notes": "For children who can swallow tablets. Can be crushed if needed."
+      "notes": "For children who can swallow tablets. Can be crushed if needed. Minimum weight 8kg (quarter tablet = 125mg)."
     },
     {
-      "type": "Tablet",
-      "strength": 1000,
-      "divisible": true,
-      "preferredFor": ["adolescent"],
-      "notes": "For adolescents >50kg only"
-    },
-    {
-      "type": "Suppository",
-      "strengths": [60, 125, 250, 500],
-      "preferredFor": ["neonates", "infants", "toddlers"],
-      "notes": "When oral route not available or vomiting"
+      "type": "IV",
+      "concentration": "1000mg/100ml",
+      "concentrationNumeric": {
+        "mg": 1000,
+        "ml": 100
+      },
+      "minWeight": 0.5,
+      "maxWeight": null,
+      "preferredFor": ["neonates", "infants", "toddlers", "preschool", "schoolAge", "adolescent"],
+      "notes": "Hospital use only. Administer over 15 minutes.",
+      "hospitalOnly": true
     }
   ],
   
