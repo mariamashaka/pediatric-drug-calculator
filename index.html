@@ -532,7 +532,10 @@
         
         let selectedDrug = null;
         let selectedAge = null;
+        let selectedIndication = null;
+        let selectedRoute = null;
         let currentDrugData = null;
+        let currentIndication = null;
         
         // Autocomplete
         const searchInput = document.getElementById('searchInput');
@@ -626,6 +629,105 @@
             document.querySelectorAll('.age-option').forEach(opt => opt.classList.remove('selected'));
             event.target.classList.add('selected');
             
+            // Check if indication-based drug
+            if (currentDrugData.calculationType === 'indication-based') {
+                showIndicationSelection();
+            } else {
+                document.getElementById('calculatorForm').classList.add('show');
+            }
+        }
+        
+        // Show indication selection (for drugs like Diazepam)
+        function showIndicationSelection() {
+            // Create indication selection if not exists
+            let indicationDiv = document.getElementById('indicationSelection');
+            
+            if (!indicationDiv) {
+                indicationDiv = document.createElement('div');
+                indicationDiv.id = 'indicationSelection';
+                indicationDiv.className = 'age-selection';
+                document.getElementById('ageSelection').after(indicationDiv);
+            }
+            
+            const indications = currentDrugData.indicationOptions;
+            
+            // Filter indications available for selected age
+            const availableIndications = indications.filter(ind => {
+                const ageGroupData = ind.ageGroups[selectedAge];
+                return ageGroupData && (ageGroupData.allowed === true || ageGroupData.allowed === 'conditional' || ageGroupData.allowed === 'with-caution');
+            });
+            
+            if (availableIndications.length === 0) {
+                alert('No indications available for this age group');
+                return;
+            }
+            
+            indicationDiv.innerHTML = `
+                <label>Select indication/use:</label>
+                <div class="age-options" id="indicationOptions">
+                    ${availableIndications.map(ind => `
+                        <div class="age-option" onclick="selectIndication('${ind.name}')">
+                            ${ind.name}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            indicationDiv.classList.add('show');
+        }
+        
+        // Select indication
+        function selectIndication(indicationName) {
+            selectedIndication = indicationName;
+            
+            document.querySelectorAll('#indicationOptions .age-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
+            // Get indication data
+            currentIndication = currentDrugData.indicationOptions.find(ind => ind.name === indicationName);
+            
+            // Check if route selection needed
+            if (currentIndication.routes && currentIndication.routes.length > 1) {
+                showRouteSelection();
+            } else {
+                selectedRoute = currentIndication.routes[0].route;
+                document.getElementById('calculatorForm').classList.add('show');
+            }
+        }
+        
+        // Show route selection
+        function showRouteSelection() {
+            let routeDiv = document.getElementById('routeSelection');
+            
+            if (!routeDiv) {
+                routeDiv = document.createElement('div');
+                routeDiv.id = 'routeSelection';
+                routeDiv.className = 'age-selection';
+                document.getElementById('indicationSelection').after(routeDiv);
+            }
+            
+            routeDiv.innerHTML = `
+                <label>Select route of administration:</label>
+                <div class="age-options" id="routeOptions">
+                    ${currentIndication.routes.map(r => `
+                        <div class="age-option ${r.preferred ? 'high-caution' : ''}" onclick="selectRoute('${r.route}')">
+                            ${r.preferred ? '✅ ' : ''}${r.route}
+                            ${r.indication ? `<br><small>${r.indication}</small>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            routeDiv.classList.add('show');
+        }
+        
+        // Select route
+        function selectRoute(route) {
+            selectedRoute = route;
+            
+            document.querySelectorAll('#routeOptions .age-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
             document.getElementById('calculatorForm').classList.add('show');
         }
         
@@ -646,6 +748,15 @@
         });
         
         function calculateAndDisplay(weight) {
+            // Check calculation type
+            if (currentDrugData.calculationType === 'indication-based') {
+                calculateIndicationBased(weight);
+            } else {
+                calculateWeightBased(weight);
+            }
+        }
+        
+        function calculateWeightBased(weight) {
             // Determine dosing
             let dosing;
             if (selectedAge === 'neonates' && currentDrugData.dosing.neonatal) {
@@ -671,6 +782,123 @@
             displaySources();
             
             document.getElementById('results').classList.add('show');
+        }
+        
+        function calculateIndicationBased(weight) {
+            // Get route-specific dosing
+            const routeData = currentIndication.routes.find(r => r.route === selectedRoute);
+            if (!routeData) {
+                alert('Route data not found');
+                return;
+            }
+            
+            const dosing = routeData.dosing;
+            let calculatedDose;
+            let doseText = '';
+            
+            // Calculate based on dosing type
+            if (dosing.calculation) {
+                // Standard mg/kg calculation
+                const match = dosing.calculation.match(/([\d.]+)(?:-([\d.]+))?\s*mg\/kg/);
+                if (match) {
+                    const minDose = parseFloat(match[1]);
+                    const maxDose = match[2] ? parseFloat(match[2]) : minDose;
+                    const preferredDose = dosing.preferredDose || maxDose;
+                    
+                    calculatedDose = weight * preferredDose;
+                    
+                    if (dosing.maxSingleDose && calculatedDose > dosing.maxSingleDose) {
+                        calculatedDose = dosing.maxSingleDose;
+                    }
+                    
+                    doseText = `${calculatedDose.toFixed(1)} mg (${weight} kg × ${preferredDose} mg/kg)`;
+                    
+                    if (minDose !== maxDose) {
+                        const minCalc = weight * minDose;
+                        const maxCalc = weight * maxDose;
+                        doseText = `${minCalc.toFixed(1)}-${maxCalc.toFixed(1)} mg (${dosing.calculation})`;
+                    }
+                }
+            } else if (dosing.fixedDose) {
+                // Fixed dose (e.g., for adolescents)
+                doseText = dosing.fixedDose;
+            }
+            
+            // Display indication-based results
+            displayIndicationBasedResult(doseText, dosing, routeData, weight);
+            displayIndicationWarnings();
+            displaySources();
+            
+            document.getElementById('results').classList.add('show');
+        }
+        
+        function displayIndicationBasedResult(doseText, dosing, routeData, weight) {
+            let html = `
+                <h4>📊 Calculated Dose:</h4>
+                <p><strong>Indication:</strong> ${selectedIndication}</p>
+                <p><strong>Route:</strong> ${selectedRoute}</p>
+                <p><strong>Dose:</strong> ${doseText}</p>
+            `;
+            
+            if (dosing.administration) {
+                html += `<p><strong>Administration:</strong> ${dosing.administration}</p>`;
+            }
+            
+            if (dosing.frequency) {
+                html += `<p><strong>Frequency:</strong> ${dosing.frequency}</p>`;
+            }
+            
+            if (dosing.maxDoses) {
+                html += `<p><strong>Maximum Doses:</strong> ${dosing.maxDoses}</p>`;
+            }
+            
+            if (dosing.repeat) {
+                html += `<p><strong>Repeat:</strong> ${dosing.repeat}</p>`;
+            }
+            
+            if (dosing.criticalCondition) {
+                html += `<p><strong>⚠️ CRITICAL:</strong> ${dosing.criticalCondition}</p>`;
+            }
+            
+            document.getElementById('doseResult').innerHTML = html;
+        }
+        
+        function displayIndicationWarnings() {
+            const warningBox = document.getElementById('warningBox');
+            let warnings = [];
+            
+            // Check for guideline conflicts (e.g., neonatal seizures)
+            const ageGroupData = currentIndication.ageGroups[selectedAge];
+            if (ageGroupData && ageGroupData.guidelineConflict) {
+                const conflict = ageGroupData.conflictDetails;
+                let html = `<h4>⚠️ CONFLICTING GUIDELINES:</h4><ul>`;
+                
+                html += `<li><strong>❌ ${conflict.tanzania.guideline}:</strong><br>${conflict.tanzania.note}</li>`;
+                html += `<li><strong>✅ ${conflict.who.guideline}:</strong><br>${conflict.who.note}</li>`;
+                html += `<li><strong>⚠️ RECOMMENDATION:</strong><br>${conflict.recommendation}</li>`;
+                
+                html += `</ul>`;
+                warningBox.innerHTML = html;
+                warningBox.className = 'warning-box neonatal-box show';
+                return;
+            }
+            
+            // Regular warnings
+            if (currentIndication.warnings) {
+                warnings = currentIndication.warnings;
+            }
+            
+            if (warnings.length > 0) {
+                let html = `<h4>⚠️ Warnings:</h4><ul>`;
+                warnings.forEach(w => {
+                    html += `<li>${w}</li>`;
+                });
+                html += `</ul>`;
+                warningBox.innerHTML = html;
+                warningBox.className = 'warning-box show';
+            } else {
+                warningBox.classList.remove('show');
+            }
         }
         
         function displayDoseResult(dose, maxDaily, dosing, weight) {
