@@ -35,7 +35,7 @@
       "range": "0-28 days",
       "allowed": true,
       "cautionLevel": "high",
-      "notes": "Use with extreme caution. Consult neonatologist. Prefer rectal route.",
+      "notes": "Use with extreme caution. Consult neonatologist.",
       "specialDosing": true
     },
     "infants": {
@@ -82,16 +82,34 @@
       "maxSingleDose": 1000,
       "maxDailyDosePerKg": 75,
       "frequency": "every 4-6 hours",
-      "maxFrequencyPerDay": 4
+      "maxFrequencyPerDay": 4,
+      "notes": "15 mg/kg recommended for optimal effect"
     },
     "neonatal": {
       "calculation": "10 mg/kg/dose",
+      "preferred": 10,
       "maxDosePerKg": 10,
       "maxSingleDose": 60,
       "maxDailyDosePerKg": 30,
       "frequency": "every 6-8 hours",
       "maxFrequencyPerDay": 4,
-      "specialNotes": "Reduced dose due to immature liver metabolism"
+      "specialNotes": "Reduced dose due to immature liver metabolism. Slower clearance - do not dose frequently.",
+      "indications": {
+        "allowed": [
+          "Pain management (with senior approval)",
+          "PDA closure (pharmacological attempt - consult cardiology)"
+        ],
+        "contraindicated": [
+          "Hyperthermia (do NOT use to reduce body temperature in neonates)"
+        ]
+      },
+      "warnings": [
+        "10 mg/kg ONLY (NOT 15 mg/kg)",
+        "Maximum every 6 hours due to slower clearance",
+        "Do NOT use for hyperthermia",
+        "Use ONLY for pain with senior approval or PDA closure",
+        "Always consult neonatologist"
+      ]
     }
   },
   
@@ -120,26 +138,42 @@
   
   "formulations": [
     {
-      "type": "Oral Suspension/Syrup",
-      "concentration": "120 mg/5ml",
-      "preferredFor": ["neonates", "infants", "toddlers"],
-      "notes": "Shake well before use"
+      "type": "Syrup",
+      "concentration": "120mg/5ml",
+      "concentrationNumeric": {
+        "mg": 120,
+        "ml": 5
+      },
+      "preferredFor": ["neonates", "infants", "toddlers", "preschool"],
+      "notes": "Shake well before use. Preferred for accurate dosing in children."
     },
     {
-      "type": "Oral Suspension/Syrup",
-      "concentration": "250 mg/5ml",
+      "type": "Syrup",
+      "concentration": "250mg/5ml",
+      "concentrationNumeric": {
+        "mg": 250,
+        "ml": 5
+      },
       "preferredFor": ["schoolAge", "adolescent"],
       "notes": "Higher concentration for older children"
     },
     {
       "type": "Tablet",
-      "strengths": ["500mg", "1000mg"],
+      "strength": 500,
+      "divisible": true,
       "preferredFor": ["schoolAge", "adolescent"],
-      "notes": "For children who can swallow tablets"
+      "notes": "For children who can swallow tablets. Can be crushed if needed."
+    },
+    {
+      "type": "Tablet",
+      "strength": 1000,
+      "divisible": true,
+      "preferredFor": ["adolescent"],
+      "notes": "For adolescents >50kg only"
     },
     {
       "type": "Suppository",
-      "strengths": ["60mg", "125mg", "250mg", "500mg"],
+      "strengths": [60, 125, 250, 500],
       "preferredFor": ["neonates", "infants", "toddlers"],
       "notes": "When oral route not available or vomiting"
     }
@@ -147,26 +181,23 @@
   
   "sources": [
     {
-      "name": "STG Tanzania",
-      "year": 2023,
+      "name": "Standard Treatment Guidelines and Essential Medicines List for Children and Adolescents",
+      "country": "Tanzania",
+      "year": 2017,
       "pages": "45-46",
       "url": null
     },
     {
-      "name": "WHO Essential Medicines List",
-      "year": 2023,
-      "section": "Pediatric analgesics",
-      "url": "https://www.who.int/publications"
-    },
-    {
-      "name": "BNF for Children",
-      "year": 2024,
-      "section": "Paracetamol",
-      "url": null
+      "name": "National Guideline for Neonatal Care and Establishment of Neonatal Care Unit",
+      "country": "Tanzania",
+      "year": 2019,
+      "pages": null,
+      "url": null,
+      "notes": "Neonatal dosing guidelines"
     }
   ],
   
-  "lastUpdated": "2025-01-15",
-  "reviewedBy": "Maria (Pediatrician)",
+  "lastUpdated": "2025-10-02",
+  "reviewedBy": "Dr. Mariia Rukavishnikova",
   "verified": true
 }
