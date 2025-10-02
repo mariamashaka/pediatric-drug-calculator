@@ -1,0 +1,324 @@
+{
+  "drugName": "Diazepam",
+  "genericName": "Diazepam",
+  "brandNames": ["Valium", "Stesolid"],
+  
+  "searchTerms": [
+    "diazepam",
+    "valium",
+    "seizures",
+    "convulsions",
+    "status epilepticus",
+    "tetanus",
+    "anxiety"
+  ],
+  
+  "categories": {
+    "primary": "Benzodiazepine",
+    "secondary": ["Anticonvulsant", "Anxiolytic", "Muscle Relaxant"],
+    "drugClass": "Benzodiazepine"
+  },
+  
+  "bodySystems": [
+    "Central Nervous System"
+  ],
+  
+  "commonIndications": [
+    "Seizures/Convulsions",
+    "Status epilepticus",
+    "Neonatal tetanus",
+    "Anxiety disorders",
+    "Panic disorders",
+    "Acute agitation"
+  ],
+  
+  "ageGroups": {
+    "neonates": {
+      "range": "0-28 days",
+      "allowed": true,
+      "cautionLevel": "high",
+      "notes": "Conflicting guidelines - see indication-specific warnings",
+      "specialDosing": true
+    },
+    "infants": {
+      "range": "1-12 months",
+      "allowed": true,
+      "cautionLevel": "medium",
+      "notes": "Standard pediatric dosing for seizures"
+    },
+    "toddlers": {
+      "range": "1-3 years",
+      "allowed": true,
+      "cautionLevel": "low",
+      "notes": "Standard dosing for seizures"
+    },
+    "preschool": {
+      "range": "3-6 years",
+      "allowed": true,
+      "cautionLevel": "low",
+      "notes": "Standard dosing"
+    },
+    "schoolAge": {
+      "range": "6-12 years",
+      "allowed": true,
+      "cautionLevel": "low",
+      "notes": "Standard dosing"
+    },
+    "adolescent": {
+      "range": "12-18 years",
+      "allowed": true,
+      "cautionLevel": "low",
+      "notes": "May use adult dosing protocols"
+    }
+  },
+  
+  "calculationType": "indication-based",
+  "inputsNeeded": ["indication", "weight", "age", "route"],
+  
+  "indicationOptions": [
+    {
+      "name": "Seizures/Convulsions",
+      "ageGroups": {
+        "neonates": {
+          "allowed": "conditional",
+          "guidelineConflict": true,
+          "conflictDetails": {
+            "tanzania": {
+              "allowed": false,
+              "guideline": "Tanzania Neonatal Guideline 2019",
+              "note": "Do NOT use diazepam for convulsions during neonatal period - Risk of respiratory depression"
+            },
+            "who": {
+              "allowed": true,
+              "guideline": "WHO Guidelines",
+              "minAge": "2 weeks",
+              "note": "Can use from 2 weeks of age"
+            },
+            "recommendation": "Preferred alternative: Phenobarbital. If diazepam used: ICU setting only with close monitoring. Always consult senior clinician."
+          }
+        },
+        "infants": { "allowed": true },
+        "toddlers": { "allowed": true },
+        "preschool": { "allowed": true },
+        "schoolAge": { "allowed": true },
+        "adolescent": { "allowed": true }
+      },
+      "routes": [
+        {
+          "route": "IV",
+          "preferred": true,
+          "dosing": {
+            "calculation": "0.3 mg/kg",
+            "maxSingleDose": 10,
+            "administration": "Slow IV push over 2-3 minutes",
+            "repeat": "May repeat after 5-10 minutes if seizures continue",
+            "maxDoses": 2,
+            "frequency": "Maximum 2 doses total"
+          }
+        },
+        {
+          "route": "Rectal",
+          "preferred": false,
+          "indication": "If no IV access",
+          "dosing": {
+            "calculation": "0.5 mg/kg",
+            "maxSingleDose": 10,
+            "administration": "Insert rectally using syringe without needle or rectal tube",
+            "repeat": "May repeat after 5-10 minutes if seizures continue",
+            "maxDoses": 2,
+            "frequency": "Maximum 2 doses total"
+          }
+        }
+      ],
+      "warnings": [
+        "Do NOT give more than 2 doses",
+        "If seizures continue after 2 doses → suspect status epilepticus",
+        "Refer for advanced management if seizures persist",
+        "Monitor respiratory rate closely",
+        "Have resuscitation equipment ready"
+      ]
+    },
+    {
+      "name": "Neonatal Tetanus",
+      "ageGroups": {
+        "neonates": { "allowed": true },
+        "infants": { "allowed": false, "note": "Not applicable - condition specific to neonates" },
+        "toddlers": { "allowed": false, "note": "Not applicable" },
+        "preschool": { "allowed": false, "note": "Not applicable" },
+        "schoolAge": { "allowed": false, "note": "Not applicable" },
+        "adolescent": { "allowed": false, "note": "Not applicable" }
+      },
+      "routes": [
+        {
+          "route": "IV",
+          "preferred": true,
+          "dosing": {
+            "calculation": "0.1-0.3 mg/kg",
+            "preferredDose": 0.2,
+            "minDose": 0.1,
+            "maxDose": 0.3,
+            "administration": "Slow IV injection over 3-5 minutes",
+            "frequency": "Every 1-4 hours depending on severity of spasms",
+            "criticalCondition": "Respiratory rate must be ≥30/min before each dose"
+          }
+        },
+        {
+          "route": "IV Continuous Infusion",
+          "preferred": false,
+          "indication": "If hourly IV doses insufficient to control spasms",
+          "dosing": {
+            "calculation": "0.1-0.5 mg/kg/hour",
+            "startDose": 0.1,
+            "maxDose": 0.5,
+            "totalDaily": "2.4-12 mg/kg in 24 hours",
+            "administration": "Using syringe pump",
+            "titration": "Start at 0.1 mg/kg/hr, increase by 0.1 mg/kg/hr if symptoms persist",
+            "criticalCondition": "Respiratory rate must remain ≥30/min"
+          },
+          "weaning": {
+            "required": true,
+            "protocol": "Gradual decrease required. Switch to oral divided doses via NG tube, then wean by 10-20% daily"
+          }
+        }
+      ],
+      "warnings": [
+        "⚠️ HIGH RISK of respiratory depression",
+        "ICU/NICU setting ONLY",
+        "Constant monitoring required: Respiratory rate, SpO2",
+        "Must have ventilation bag, mask, suction at bedside",
+        "Do NOT give if RR <30/min",
+        "Requires weaning protocol - do NOT stop abruptly"
+      ]
+    },
+    {
+      "name": "Anxiety/Panic/Mania",
+      "ageGroups": {
+        "neonates": { "allowed": false, "note": "Not recommended" },
+        "infants": { "allowed": false, "note": "Not recommended" },
+        "toddlers": { "allowed": false, "note": "Not recommended" },
+        "preschool": { 
+          "allowed": "with-caution",
+          "note": "Use with extreme caution. Specialist consultation required."
+        },
+        "schoolAge": { "allowed": true },
+        "adolescent": { "allowed": true }
+      },
+      "routes": [
+        {
+          "route": "IV",
+          "preferred": true,
+          "indication": "Acute agitation - to calm patient",
+          "dosing": {
+            "adolescent": {
+              "fixedDose": "5-10 mg stat"
+            },
+            "children": {
+              "calculation": "0.1-0.2 mg/kg",
+              "maxSingleDose": 10,
+              "note": "Weight-based dosing safer for children"
+            },
+            "administration": "Slow IV push"
+          }
+        },
+        {
+          "route": "PO",
+          "preferred": false,
+          "indication": "Maintenance after acute stabilization",
+          "dosing": {
+            "calculation": "0.1 mg/kg/day",
+            "frequency": "Divided doses",
+            "administration": "Oral tablets"
+          }
+        }
+      ],
+      "warnings": [
+        "⚠️ Long-term use should be avoided (addiction risk)",
+        "Not first-line for pediatric anxiety",
+        "Refer to psychiatrist/specialist for adequate management",
+        "Monitor for paradoxical reactions in children",
+        "Avoid in patients with respiratory problems"
+      ]
+    }
+  ],
+  
+  "contraindications": [
+    {
+      "condition": "Severe respiratory depression",
+      "severity": "absolute"
+    },
+    {
+      "condition": "Acute narrow-angle glaucoma",
+      "severity": "absolute"
+    },
+    {
+      "condition": "Known hypersensitivity to benzodiazepines",
+      "severity": "absolute"
+    },
+    {
+      "condition": "Myasthenia gravis",
+      "severity": "relative",
+      "notes": "May worsen muscle weakness"
+    }
+  ],
+  
+  "generalWarnings": [
+    "Risk of respiratory depression - monitor closely",
+    "Have resuscitation equipment available",
+    "Use with extreme caution in neonates",
+    "Paradoxical reactions possible in children (agitation, aggression)",
+    "Avoid abrupt discontinuation after prolonged use",
+    "May impair consciousness and coordination"
+  ],
+  
+  "formulations": [
+    {
+      "type": "Injection",
+      "concentration": "5mg/ml",
+      "ampouleSize": "2ml",
+      "totalPerAmpoule": "10mg",
+      "minWeight": 0.5,
+      "maxWeight": null,
+      "preferredFor": ["neonates", "infants", "toddlers", "preschool", "schoolAge", "adolescent"],
+      "notes": "Can be used IV or rectally. For rectal: use syringe without needle."
+    },
+    {
+      "type": "Tablet",
+      "strengths": [2, 5],
+      "divisible": true,
+      "minWeight": null,
+      "maxWeight": null,
+      "preferredFor": ["schoolAge", "adolescent"],
+      "excludeAgeGroups": ["neonates", "infants", "toddlers"],
+      "indication": "For oral maintenance (anxiety) only, not for acute seizures",
+      "notes": "For anxiety/panic maintenance treatment only"
+    }
+  ],
+  
+  "sources": [
+    {
+      "name": "Emergency Medicine Clinical Protocols 2nd Edition",
+      "country": "Tanzania",
+      "organization": "MNH | EMAT | MUHAS",
+      "year": 2015
+    },
+    {
+      "name": "Standard Treatment Guidelines and Essential Medicines List for Children and Adolescents",
+      "country": "Tanzania",
+      "year": 2019
+    },
+    {
+      "name": "National Guideline for Neonatal Care and Establishment of Neonatal Care Unit",
+      "country": "Tanzania",
+      "year": 2019
+    },
+    {
+      "name": "WHO Guidelines",
+      "organization": "World Health Organization",
+      "year": 2023
+    }
+  ],
+  
+  "lastUpdated": "2025-10-02",
+  "reviewedBy": "Dr. Mariia Rukavishnikova",
+  "verified": true
+}
