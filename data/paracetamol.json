@@ -1,64 +1,147 @@
 {
   "drugName": "Paracetamol",
   "genericName": "Acetaminophen",
-  "category": "Antipyretic/Analgesic",
-  "calculationType": "weight-based",
+  "brandNames": ["Tylenol", "Panadol", "Calpol"],
   
+  "searchTerms": [
+    "paracetamol",
+    "acetaminophen",
+    "tylenol",
+    "panadol",
+    "fever",
+    "pain"
+  ],
+  
+  "categories": {
+    "primary": "Analgesic",
+    "secondary": ["Antipyretic"],
+    "drugClass": "Non-opioid analgesic"
+  },
+  
+  "bodySystems": [
+    "General/Systemic"
+  ],
+  
+  "commonIndications": [
+    "Fever",
+    "Mild to moderate pain",
+    "Post-vaccination fever",
+    "Headache",
+    "Toothache"
+  ],
+  
+  "ageGroups": {
+    "neonates": {
+      "range": "0-28 days",
+      "allowed": true,
+      "cautionLevel": "high",
+      "notes": "Use with extreme caution. Consult neonatologist. Prefer rectal route.",
+      "specialDosing": true
+    },
+    "infants": {
+      "range": "1-12 months",
+      "allowed": true,
+      "cautionLevel": "medium",
+      "notes": "Standard pediatric dosing applies"
+    },
+    "toddlers": {
+      "range": "1-3 years",
+      "allowed": true,
+      "cautionLevel": "low",
+      "notes": "Standard dosing"
+    },
+    "preschool": {
+      "range": "3-6 years",
+      "allowed": true,
+      "cautionLevel": "low",
+      "notes": "Standard dosing"
+    },
+    "schoolAge": {
+      "range": "6-12 years",
+      "allowed": true,
+      "cautionLevel": "low",
+      "notes": "May use adult formulations with dose adjustment"
+    },
+    "adolescent": {
+      "range": "12-18 years",
+      "allowed": true,
+      "cautionLevel": "low",
+      "notes": "Adult dosing may apply for weight >50kg"
+    }
+  },
+  
+  "calculationType": "weight-based",
   "inputsNeeded": ["weight", "age"],
   
   "dosing": {
-    "calculation": "15 mg/kg/dose",
-    "minDosePerKg": 10,
-    "maxDosePerKg": 15,
-    "maxSingleDose": 1000,
-    "maxDailyDosePerKg": 75,
-    "frequency": "every 4-6 hours",
-    "maxFrequencyPerDay": 4
-  },
-  
-  "ageRestrictions": {
-    "0-3m": {
-      "allowed": true,
-      "warning": "Use with caution. Consult senior doctor.",
-      "notes": "Prefer rectal route if available"
+    "standard": {
+      "calculation": "10-15 mg/kg/dose",
+      "preferred": 15,
+      "minDosePerKg": 10,
+      "maxDosePerKg": 15,
+      "maxSingleDose": 1000,
+      "maxDailyDosePerKg": 75,
+      "frequency": "every 4-6 hours",
+      "maxFrequencyPerDay": 4
     },
-    "3-12m": {
-      "allowed": true,
-      "warning": null,
-      "notes": "Standard dosing applies"
-    },
-    "1-5y": {
-      "allowed": true,
-      "warning": null,
-      "notes": "Standard dosing applies"
-    },
-    "6-12y": {
-      "allowed": true,
-      "warning": "Maximum 1g per dose",
-      "notes": "May use adult formulations"
+    "neonatal": {
+      "calculation": "10 mg/kg/dose",
+      "maxDosePerKg": 10,
+      "maxSingleDose": 60,
+      "maxDailyDosePerKg": 30,
+      "frequency": "every 6-8 hours",
+      "maxFrequencyPerDay": 4,
+      "specialNotes": "Reduced dose due to immature liver metabolism"
     }
   },
   
   "contraindications": [
-    "Severe liver disease",
-    "Known hypersensitivity to paracetamol"
+    {
+      "condition": "Severe liver disease",
+      "severity": "absolute"
+    },
+    {
+      "condition": "Known hypersensitivity to paracetamol",
+      "severity": "absolute"
+    },
+    {
+      "condition": "G6PD deficiency",
+      "severity": "relative",
+      "notes": "Use with caution, may cause hemolysis in high doses"
+    }
+  ],
+  
+  "warnings": [
+    "Do not exceed maximum daily dose",
+    "Risk of hepatotoxicity with overdose",
+    "Avoid concurrent use of other paracetamol-containing products",
+    "Use caution in malnutrition or dehydration"
   ],
   
   "formulations": [
     {
-      "type": "Syrup",
+      "type": "Oral Suspension/Syrup",
       "concentration": "120 mg/5ml",
-      "notes": "Preferred for children under 6 years"
+      "preferredFor": ["neonates", "infants", "toddlers"],
+      "notes": "Shake well before use"
+    },
+    {
+      "type": "Oral Suspension/Syrup",
+      "concentration": "250 mg/5ml",
+      "preferredFor": ["schoolAge", "adolescent"],
+      "notes": "Higher concentration for older children"
     },
     {
       "type": "Tablet",
       "strengths": ["500mg", "1000mg"],
+      "preferredFor": ["schoolAge", "adolescent"],
       "notes": "For children who can swallow tablets"
     },
     {
       "type": "Suppository",
-      "strengths": ["125mg", "250mg", "500mg"],
-      "notes": "When oral route not available"
+      "strengths": ["60mg", "125mg", "250mg", "500mg"],
+      "preferredFor": ["neonates", "infants", "toddlers"],
+      "notes": "When oral route not available or vomiting"
     }
   ],
   
@@ -66,14 +149,24 @@
     {
       "name": "STG Tanzania",
       "year": 2023,
-      "page": "45-46"
+      "pages": "45-46",
+      "url": null
     },
     {
       "name": "WHO Essential Medicines List",
       "year": 2023,
-      "section": "Pediatric analgesics"
+      "section": "Pediatric analgesics",
+      "url": "https://www.who.int/publications"
+    },
+    {
+      "name": "BNF for Children",
+      "year": 2024,
+      "section": "Paracetamol",
+      "url": null
     }
   ],
   
-  "lastUpdated": "2025-01-15"
+  "lastUpdated": "2025-01-15",
+  "reviewedBy": "Maria (Pediatrician)",
+  "verified": true
 }
