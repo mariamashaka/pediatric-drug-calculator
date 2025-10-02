@@ -15,34 +15,40 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
         }
         
         .container {
+            max-width: 700px;
+            margin: 0 auto;
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 600px;
-            width: 100%;
-            padding: 30px;
+            overflow: hidden;
         }
         
-        h1 {
-            color: #667eea;
-            margin-bottom: 10px;
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
             font-size: 28px;
+            margin-bottom: 8px;
         }
         
         .subtitle {
-            color: #666;
-            margin-bottom: 30px;
+            opacity: 0.9;
             font-size: 14px;
         }
         
-        /* Search Box with Autocomplete */
+        .content {
+            padding: 30px;
+        }
+        
+        /* Search */
         .search-wrapper {
             position: relative;
             margin-bottom: 25px;
@@ -75,6 +81,7 @@
             overflow-y: auto;
             display: none;
             z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         .autocomplete-dropdown.show {
@@ -125,20 +132,20 @@
             font-size: 13px;
         }
         
-        /* Age Filter */
-        .age-filter {
-            background: #fff3e0;
+        /* Age Selection */
+        .age-selection {
+            background: #fff8e1;
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
             display: none;
         }
         
-        .age-filter.show {
+        .age-selection.show {
             display: block;
         }
         
-        .age-filter label {
+        .age-selection label {
             display: block;
             font-weight: 600;
             margin-bottom: 10px;
@@ -147,12 +154,12 @@
         
         .age-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
         }
         
         .age-option {
-            padding: 10px;
+            padding: 12px;
             background: white;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
@@ -164,6 +171,7 @@
         
         .age-option:hover {
             border-color: #667eea;
+            transform: translateY(-2px);
         }
         
         .age-option.selected {
@@ -171,13 +179,14 @@
             background: #f5f5ff;
         }
         
-        .age-option.newborn {
+        .age-option.high-caution {
             border-left: 4px solid #ff9800;
         }
         
-        .age-option .warning {
+        .age-option .warning-icon {
             color: #ff9800;
             font-size: 16px;
+            margin-right: 5px;
         }
         
         /* Form */
@@ -193,7 +202,7 @@
             margin-bottom: 20px;
         }
         
-        label {
+        .input-group label {
             display: block;
             color: #333;
             font-weight: 600;
@@ -201,7 +210,7 @@
             font-size: 14px;
         }
         
-        input, select {
+        input {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
@@ -210,7 +219,7 @@
             transition: border-color 0.3s;
         }
         
-        input:focus, select:focus {
+        input:focus {
             outline: none;
             border-color: #667eea;
         }
@@ -234,11 +243,6 @@
         
         .btn:active {
             transform: translateY(0);
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
         }
         
         /* Results */
@@ -265,25 +269,85 @@
             background: white;
             padding: 15px;
             border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .dose-result h4 {
+            color: #667eea;
             margin-bottom: 10px;
+            font-size: 16px;
         }
         
         .dose-result p {
             margin: 8px 0;
+            font-size: 14px;
         }
         
         .dose-result strong {
-            color: #667eea;
+            color: #333;
         }
         
-        .warning-box {
-            background: #fff3e0;
+        .dose-info {
+            background: #f5f5f5;
             padding: 12px;
             border-radius: 8px;
-            border-left: 4px solid #ff9800;
             margin-top: 10px;
             font-size: 13px;
-            color: #e65100;
+        }
+        
+        .dose-info ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+        
+        .dose-info li {
+            margin: 3px 0;
+        }
+        
+        /* Formulations */
+        .formulations {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .formulations h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .formulation-option {
+            padding: 10px;
+            background: #f9f9f9;
+            border-left: 3px solid #4caf50;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        
+        .formulation-option.warning {
+            border-left-color: #ff9800;
+            background: #fff3e0;
+        }
+        
+        .formulation-option strong {
+            color: #333;
+        }
+        
+        .formulation-note {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        /* Warnings */
+        .warning-box {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+            margin-bottom: 15px;
             display: none;
         }
         
@@ -291,68 +355,151 @@
             display: block;
         }
         
+        .warning-box h4 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        
+        .warning-box ul {
+            margin-left: 20px;
+        }
+        
+        .warning-box li {
+            color: #e65100;
+            margin: 5px 0;
+            font-size: 13px;
+        }
+        
+        .neonatal-box {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        
+        .neonatal-box h4 {
+            color: #c62828;
+        }
+        
+        .neonatal-box li {
+            color: #c62828;
+        }
+        
+        .contraindication {
+            color: #c62828;
+            font-weight: 600;
+        }
+        
+        .indication {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        
+        /* Sources */
         .sources {
-            margin-top: 15px;
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
             font-size: 12px;
             color: #666;
-            font-style: italic;
+            margin-bottom: 15px;
+        }
+        
+        .sources strong {
+            color: #333;
         }
         
         .btn-print {
-            margin-top: 15px;
             background: #4caf50;
-            padding: 10px;
-            font-size: 14px;
+            margin-top: 0;
+        }
+        
+        /* Footer */
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        footer strong {
+            color: #333;
+        }
+        
+        @media (max-width: 600px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .age-options {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>💊 Pediatric Drug Calculator</h1>
-        <p class="subtitle">Evidence-based dosing for pediatric patients</p>
+        <header>
+            <h1>💊 Pediatric Drug Calculator</h1>
+            <p class="subtitle">Evidence-based dosing for pediatric patients</p>
+        </header>
         
-        <!-- Search with Autocomplete -->
-        <div class="search-wrapper">
-            <input 
-                type="text" 
-                class="search-input" 
-                id="searchInput"
-                placeholder="🔍 Search drug by name (e.g., Paracetamol, Amoxicillin...)"
-                autocomplete="off"
-            >
-            <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
-        </div>
-        
-        <!-- Drug Info -->
-        <div class="drug-info" id="drugInfo">
-            <h2 id="drugName"></h2>
-            <p id="drugCategory"></p>
-        </div>
-        
-        <!-- Age Filter (показывается только для некоторых лекарств) -->
-        <div class="age-filter" id="ageFilter">
-            <label>⚠️ Select Patient Age Group (Important for dosing):</label>
-            <div class="age-options" id="ageOptions"></div>
-        </div>
-        
-        <!-- Calculator Form -->
-        <form class="calculator-form" id="calculatorForm">
-            <div class="input-group">
-                <label for="weight">Patient Weight (kg):</label>
-                <input type="number" id="weight" placeholder="Enter weight..." min="0.5" step="0.1" required>
+        <div class="content">
+            <!-- Search -->
+            <div class="search-wrapper">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="🔍 Search drug by name (e.g., Paracetamol...)"
+                    autocomplete="off"
+                >
+                <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
             </div>
             
-            <button type="submit" class="btn">Calculate Dose</button>
-        </form>
-        
-        <!-- Results -->
-        <div class="results" id="results">
-            <h3>📋 Dosing Results:</h3>
-            <div class="dose-result" id="doseResult"></div>
-            <div class="warning-box" id="warningBox"></div>
-            <div class="sources" id="sources"></div>
-            <button class="btn btn-print" onclick="printPrescription()">🖨️ Print Prescription</button>
+            <!-- Drug Info -->
+            <div class="drug-info" id="drugInfo">
+                <h2 id="drugName"></h2>
+                <p id="drugCategory"></p>
+            </div>
+            
+            <!-- Age Selection -->
+            <div class="age-selection" id="ageSelection">
+                <label>Select patient age group:</label>
+                <div class="age-options" id="ageOptions"></div>
+            </div>
+            
+            <!-- Calculator Form -->
+            <form class="calculator-form" id="calculatorForm">
+                <div class="input-group">
+                    <label for="weight">Patient Weight (kg):</label>
+                    <input type="number" id="weight" placeholder="Enter weight..." min="0.5" step="0.1" required>
+                </div>
+                
+                <button type="submit" class="btn">Calculate Dose</button>
+            </form>
+            
+            <!-- Results -->
+            <div class="results" id="results">
+                <h3>📋 Dosing Results</h3>
+                
+                <div class="dose-result" id="doseResult"></div>
+                
+                <div class="formulations" id="formulationsSection"></div>
+                
+                <div class="warning-box" id="warningBox"></div>
+                
+                <div class="sources" id="sources"></div>
+                
+                <button class="btn btn-print" onclick="printPrescription()">🖨️ Print Prescription</button>
+            </div>
         </div>
+        
+        <footer>
+            © 2025 Pediatric Drug Calculator<br>
+            <strong>Developed by Dr. Mariia Rukavishnikova</strong>
+        </footer>
     </div>
 
     <script>
@@ -361,21 +508,18 @@
             {
                 id: 'paracetamol',
                 name: 'Paracetamol',
-                searchTerms: ['paracetamol', 'acetaminophen', 'tylenol', 'panadol'],
-                category: 'Analgesic / Antipyretic',
-                ageGroups: ['neonates', 'infants', 'toddlers', 'preschool', 'schoolAge', 'adolescent'],
-                showAgeFilter: true
+                searchTerms: ['paracetamol', 'acetaminophen', 'tylenol', 'panadol', 'fever', 'pain'],
+                category: 'Analgesic / Antipyretic'
             }
-            // Add more drugs here later
         ];
         
-        const ageGroupsData = {
-            'neonates': { label: '👶 Newborn (0-28 days)', warning: true },
-            'infants': { label: '🍼 Infant (1-12 months)', warning: false },
-            'toddlers': { label: '🧸 Toddler (1-3 years)', warning: false },
-            'preschool': { label: '🎨 Preschool (3-6 years)', warning: false },
-            'schoolAge': { label: '📚 School Age (6-12 years)', warning: false },
-            'adolescent': { label: '🎓 Adolescent (12-18 years)', warning: false }
+        const ageGroupsDisplay = {
+            'neonates': { label: '👶 Newborn', range: '0-28 days' },
+            'infants': { label: '🍼 Infant', range: '1-12 months' },
+            'toddlers': { label: '🧸 Toddler', range: '1-3 years' },
+            'preschool': { label: '🎨 Preschool', range: '3-6 years' },
+            'schoolAge': { label: '📚 School Age', range: '6-12 years' },
+            'adolescent': { label: '🎓 Adolescent', range: '12-18 years' }
         };
         
         let selectedDrug = null;
@@ -412,7 +556,6 @@
             }
         });
         
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.search-wrapper')) {
                 autocompleteDropdown.classList.remove('show');
@@ -427,24 +570,17 @@
             autocompleteDropdown.classList.remove('show');
             searchInput.value = selectedDrug.name;
             
-            // Load drug data
             try {
                 const response = await fetch(`data/${drugId}.json`);
                 currentDrugData = await response.json();
                 
-                // Show drug info
                 document.getElementById('drugName').textContent = currentDrugData.drugName;
-                document.getElementById('drugCategory').textContent = currentDrugData.category;
+                document.getElementById('drugCategory').textContent = currentDrugData.categories.primary + 
+                    (currentDrugData.categories.secondary ? ' / ' + currentDrugData.categories.secondary.join(' / ') : '');
                 document.getElementById('drugInfo').classList.add('show');
                 
-                // Show age filter if needed
-                if (selectedDrug.showAgeFilter) {
-                    showAgeFilter();
-                } else {
-                    document.getElementById('ageFilter').classList.remove('show');
-                    document.getElementById('calculatorForm').classList.add('show');
-                }
-                
+                showAgeSelection();
+                document.getElementById('calculatorForm').classList.remove('show');
                 document.getElementById('results').classList.remove('show');
                 
             } catch (error) {
@@ -453,45 +589,43 @@
             }
         }
         
-        // Show age filter
-        function showAgeFilter() {
+        // Show age selection
+        function showAgeSelection() {
             const ageOptionsDiv = document.getElementById('ageOptions');
             const ageGroups = currentDrugData.ageGroups;
             
             ageOptionsDiv.innerHTML = Object.keys(ageGroups).map(ageKey => {
                 const ageData = ageGroups[ageKey];
-                const displayData = ageGroupsData[ageKey];
-                const warningIcon = ageData.cautionLevel === 'high' ? '<span class="warning">⚠️</span>' : '';
-                const newbornClass = ageKey === 'neonates' ? 'newborn' : '';
+                const displayData = ageGroupsDisplay[ageKey];
+                const warningIcon = ageData.cautionLevel === 'high' ? '<span class="warning-icon">⚠️</span>' : '';
+                const cautionClass = ageData.cautionLevel === 'high' ? 'high-caution' : '';
                 
                 return `
-                    <div class="age-option ${newbornClass}" onclick="selectAge('${ageKey}')">
-                        ${warningIcon} ${displayData.label}
+                    <div class="age-option ${cautionClass}" onclick="selectAge('${ageKey}')">
+                        ${warningIcon}${displayData.label}<br>
+                        <small>${displayData.range}</small>
                     </div>
                 `;
             }).join('');
             
-            document.getElementById('ageFilter').classList.add('show');
-            document.getElementById('calculatorForm').classList.remove('show');
+            document.getElementById('ageSelection').classList.add('show');
         }
         
         // Select age
         function selectAge(ageKey) {
             selectedAge = ageKey;
             
-            // Update UI
             document.querySelectorAll('.age-option').forEach(opt => opt.classList.remove('selected'));
             event.target.classList.add('selected');
             
-            // Show form
             document.getElementById('calculatorForm').classList.add('show');
         }
         
-        // Calculate dose
+        // Calculate
         document.getElementById('calculatorForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            if (!currentDrugData) return;
+            if (!currentDrugData || !selectedAge) return;
             
             const weight = parseFloat(document.getElementById('weight').value);
             
@@ -500,7 +634,11 @@
                 return;
             }
             
-            // Determine which dosing to use
+            calculateAndDisplay(weight);
+        });
+        
+        function calculateAndDisplay(weight) {
+            // Determine dosing
             let dosing;
             if (selectedAge === 'neonates' && currentDrugData.dosing.neonatal) {
                 dosing = currentDrugData.dosing.neonatal;
@@ -509,58 +647,164 @@
             }
             
             // Calculate
-            const dosePerKg = dosing.preferred || dosing.maxDosePerKg;
+            const dosePerKg = dosing.preferred;
             let calculatedDose = weight * dosePerKg;
             
-            // Apply max
             if (calculatedDose > dosing.maxSingleDose) {
                 calculatedDose = dosing.maxSingleDose;
             }
             
             const maxDaily = weight * dosing.maxDailyDosePerKg;
             
-            // Display results
-            displayResults(calculatedDose, maxDaily, dosing, weight);
-        });
-        
-        // Display results
-        function displayResults(dose, maxDaily, dosing, weight) {
-            const doseResultDiv = document.getElementById('doseResult');
-            const warningBox = document.getElementById('warningBox');
-            const sourcesDiv = document.getElementById('sources');
-            
-            doseResultDiv.innerHTML = `
-                <p><strong>Single Dose:</strong> ${dose.toFixed(0)} mg</p>
-                <p><strong>Frequency:</strong> ${dosing.frequency}</p>
-                <p><strong>Maximum Daily Dose:</strong> ${maxDaily.toFixed(0)} mg/day</p>
-                <p><strong>Calculation:</strong> ${weight} kg × ${dosing.preferred || dosing.maxDosePerKg} mg/kg = ${dose.toFixed(0)} mg</p>
-            `;
-            
-            // Warnings
-            const ageData = currentDrugData.ageGroups[selectedAge];
-            if (ageData && ageData.cautionLevel === 'high') {
-                warningBox.innerHTML = `<strong>⚠️ Warning:</strong> ${ageData.notes}`;
-                warningBox.classList.add('show');
-            } else {
-                warningBox.classList.remove('show');
-            }
-            
-            // Sources
-            if (currentDrugData.sources) {
-                sourcesDiv.innerHTML = '<strong>Sources:</strong><br>' + 
-                    currentDrugData.sources.map(s => 
-                        `• ${s.name} (${s.year})${s.pages ? ', pages ' + s.pages : ''}`
-                    ).join('<br>');
-            }
+            // Display
+            displayDoseResult(calculatedDose, maxDaily, dosing, weight);
+            displayFormulations(calculatedDose);
+            displayWarnings();
+            displaySources();
             
             document.getElementById('results').classList.add('show');
         }
         
-        // Print
+        function displayDoseResult(dose, maxDaily, dosing, weight) {
+            const html = `
+                <h4>📊 Calculated Dose for this Patient:</h4>
+                <p><strong>Single Dose:</strong> ${dose.toFixed(0)} mg</p>
+                <p><strong>Frequency:</strong> ${dosing.frequency}</p>
+                <p><strong>Maximum Daily Dose:</strong> ${maxDaily.toFixed(0)} mg/day (max ${dosing.maxFrequencyPerDay}× per day)</p>
+                <p><strong>Calculation:</strong> ${weight} kg × ${dosing.preferred} mg/kg = ${dose.toFixed(0)} mg</p>
+                
+                <div class="dose-info">
+                    <strong>ℹ️ Dosing Information:</strong>
+                    <ul>
+                        <li>Standard dose range: ${dosing.calculation}</li>
+                        <li>Recommended: ${dosing.preferred} mg/kg ${dosing.notes ? '(' + dosing.notes + ')' : ''}</li>
+                        <li>Do not exceed maximum doses</li>
+                    </ul>
+                </div>
+            `;
+            document.getElementById('doseResult').innerHTML = html;
+        }
+        
+        function displayFormulations(calculatedDose) {
+            const formulations = currentDrugData.formulations;
+            let html = '<h4>💊 How to Administer:</h4>';
+            
+            formulations.forEach(form => {
+                if (form.type === 'Syrup' && form.concentrationNumeric) {
+                    const mgPerMl = form.concentrationNumeric.mg / form.concentrationNumeric.ml;
+                    const volumeMl = (calculatedDose / mgPerMl).toFixed(1);
+                    html += `
+                        <div class="formulation-option">
+                            <strong>✅ RECOMMENDED: Syrup ${form.concentration}</strong><br>
+                            → Give ${volumeMl} ml
+                            ${form.notes ? `<div class="formulation-note">${form.notes}</div>` : ''}
+                        </div>
+                    `;
+                }
+                
+                if (form.type === 'Tablet' && form.divisible) {
+                    const tabletOptions = calculateTabletOptions(calculatedDose, form.strength);
+                    html += `<div class="formulation-option${tabletOptions.warning ? ' warning' : ''}">
+                        <strong>✅ Alternative: Tablet ${form.strength}mg</strong><br>
+                        ${tabletOptions.html}
+                        ${form.notes ? `<div class="formulation-note">${form.notes}</div>` : ''}
+                    </div>`;
+                }
+            });
+            
+            document.getElementById('formulationsSection').innerHTML = html;
+        }
+        
+        function calculateTabletOptions(dose, strength) {
+            const fractions = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+            const options = fractions.map(f => ({
+                fraction: f,
+                fractionText: f === 0.25 ? '¼' : f === 0.5 ? '½' : f === 0.75 ? '¾' : f === 1.25 ? '1¼' : f === 1.5 ? '1½' : f === 1.75 ? '1¾' : f,
+                mg: f * strength,
+                diff: Math.abs((f * strength) - dose)
+            })).sort((a, b) => a.diff - b.diff);
+            
+            const best = options[0];
+            const second = options[1];
+            
+            let html = '';
+            let hasWarning = false;
+            
+            if (best.mg < dose) {
+                html += `→ Give ${best.fractionText} tablet (${best.mg} mg)<br>`;
+            } else if (best.mg > dose) {
+                html += `→ Give ${best.fractionText} tablet (${best.mg} mg - ⚠️ exceeds dose by ${(best.mg - dose).toFixed(0)} mg)<br>`;
+                hasWarning = true;
+            } else {
+                html += `→ Give ${best.fractionText} tablet (${best.mg} mg - exact dose)<br>`;
+            }
+            
+            if (second && second.diff < dose * 0.3) {
+                html += `→ Or give ${second.fractionText} tablet (${second.mg} mg`;
+                if (second.mg > dose) {
+                    html += ` - ⚠️ exceeds dose by ${(second.mg - dose).toFixed(0)} mg`;
+                    hasWarning = true;
+                }
+                html += `)<br>`;
+            }
+            
+            html += `<div class="formulation-note">⚠️ Do not exceed calculated dose</div>`;
+            
+            return { html, warning: hasWarning };
+        }
+        
+        function displayWarnings() {
+            const warningBox = document.getElementById('warningBox');
+            const ageData = currentDrugData.ageGroups[selectedAge];
+            
+            if (selectedAge === 'neonates' && currentDrugData.dosing.neonatal) {
+                const neonatalDosing = currentDrugData.dosing.neonatal;
+                let html = `<h4>⚠️ NEONATAL DOSING (0-28 days):</h4><ul>`;
+                
+                if (neonatalDosing.warnings) {
+                    neonatalDosing.warnings.forEach(w => {
+                        html += `<li>${w}</li>`;
+                    });
+                }
+                
+                if (neonatalDosing.indications) {
+                    html += `<li class="indication">INDICATIONS: ${neonatalDosing.indications.allowed.join('; ')}</li>`;
+                    html += `<li class="contraindication">CONTRAINDICATIONS: ${neonatalDosing.indications.contraindicated.join('; ')}</li>`;
+                }
+                
+                html += `</ul>`;
+                warningBox.innerHTML = html;
+                warningBox.className = 'warning-box neonatal-box show';
+            } else if (ageData.cautionLevel === 'high' || ageData.cautionLevel === 'medium') {
+                warningBox.innerHTML = `<h4>⚠️ Warning:</h4><ul><li>${ageData.notes}</li></ul>`;
+                warningBox.className = 'warning-box show';
+            } else {
+                warningBox.classList.remove('show');
+            }
+        }
+        
+        function displaySources() {
+            if (!currentDrugData.sources) return;
+            
+            let html = '<strong>📚 Sources:</strong><br>';
+            currentDrugData.sources.forEach(s => {
+                html += `• ${s.name}`;
+                if (s.country) html += `, ${s.country}`;
+                html += ` (${s.year})`;
+                if (s.pages) html += `, pages ${s.pages}`;
+                if (s.notes) html += ` - ${s.notes}`;
+                html += '<br>';
+            });
+            
+            document.getElementById('sources').innerHTML = html;
+        }
+        
         function printPrescription() {
             const weight = document.getElementById('weight').value;
-            const doseText = document.getElementById('doseResult').innerHTML;
             const drugName = currentDrugData.drugName;
+            const doseText = document.getElementById('doseResult').innerText;
+            const formText = document.getElementById('formulationsSection').innerText;
+            const warningText = document.getElementById('warningBox').innerText || '';
             
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
@@ -568,27 +812,36 @@
                 <head>
                     <title>Prescription - ${drugName}</title>
                     <style>
-                        body { font-family: Arial; padding: 20px; }
+                        body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
                         h1 { color: #667eea; }
-                        .info { margin: 20px 0; }
-                        .dose { background: #f0f0f0; padding: 15px; border-radius: 5px; }
+                        .info { margin: 20px 0; background: #f5f5f5; padding: 15px; }
+                        .dose { background: #e8f5e9; padding: 15px; margin: 15px 0; }
+                        .warning { background: #fff3e0; padding: 15px; margin: 15px 0; border-left: 4px solid #ff9800; }
+                        .footer { margin-top: 30px; font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 15px; }
                     </style>
                 </head>
                 <body>
-                    <h1>Pediatric Drug Calculator - Prescription</h1>
+                    <h1>💊 Pediatric Drug Calculator - Prescription</h1>
                     <div class="info">
                         <p><strong>Drug:</strong> ${drugName}</p>
                         <p><strong>Patient Weight:</strong> ${weight} kg</p>
-                        <p><strong>Age Group:</strong> ${ageGroupsData[selectedAge].label}</p>
+                        <p><strong>Age Group:</strong> ${ageGroupsDisplay[selectedAge].label} (${ageGroupsDisplay[selectedAge].range})</p>
+                        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
                     </div>
                     <div class="dose">
-                        <h3>Dosage:</h3>
-                        ${doseText}
+                        <h3>Dosage Instructions:</h3>
+                        <pre>${doseText}</pre>
                     </div>
-                    <p style="margin-top: 30px; font-size: 12px;">
-                        Generated: ${new Date().toLocaleString()}<br>
-                        Pediatric Drug Calculator
-                    </p>
+                    <div class="dose">
+                        <h3>Administration:</h3>
+                        <pre>${formText}</pre>
+                    </div>
+                    ${warningText ? `<div class="warning"><h3>Warnings:</h3><pre>${warningText}</pre></div>` : ''}
+                    <div class="footer">
+                        <p>Generated by Pediatric Drug Calculator</p>
+                        <p>© 2025 | Developed by Dr. Mariia Rukavishnikova</p>
+                        <p><em>This is a calculation aid. Always verify dosing with current guidelines and senior clinician.</em></p>
+                    </div>
                 </body>
                 </html>
             `);
