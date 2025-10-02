@@ -147,6 +147,7 @@
       "minWeight": 0.5,
       "maxWeight": null,
       "preferredFor": ["neonates", "infants", "toddlers", "preschool", "schoolAge"],
+      "excludeAgeGroups": ["adolescent"],
       "notes": "Shake well before use. Preferred for accurate dosing in children."
     },
     {
@@ -164,6 +165,7 @@
       "minWeight": 8,
       "maxWeight": null,
       "preferredFor": ["schoolAge", "adolescent"],
+      "excludeAgeGroups": ["neonates"],
       "notes": "For children who can swallow tablets. Can be crushed if needed. Minimum weight 8kg (quarter tablet = 125mg)."
     },
     {
