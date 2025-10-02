@@ -1,0 +1,40 @@
+[
+  {
+    "id": "paracetamol",
+    "name": "Paracetamol",
+    "genericName": "Acetaminophen",
+    "searchTerms": [
+      "paracetamol",
+      "acetaminophen",
+      "tylenol",
+      "panadol",
+      "calpol",
+      "fever",
+      "pain",
+      "antipyretic",
+      "analgesic"
+    ],
+    "category": "Analgesic / Antipyretic",
+    "calculationType": "weight-based"
+  },
+  {
+    "id": "diazepam",
+    "name": "Diazepam",
+    "genericName": "Diazepam",
+    "searchTerms": [
+      "diazepam",
+      "valium",
+      "stesolid",
+      "seizures",
+      "convulsions",
+      "epilepsy",
+      "status epilepticus",
+      "tetanus",
+      "anxiety",
+      "panic",
+      "benzodiazepine"
+    ],
+    "category": "Benzodiazepine / Anticonvulsant",
+    "calculationType": "indication-based"
+  }
+]
