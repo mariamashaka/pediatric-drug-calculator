@@ -503,15 +503,23 @@
     </div>
 
     <script>
-        // Drug database
-        const drugs = [
-            {
-                id: 'paracetamol',
-                name: 'Paracetamol',
-                searchTerms: ['paracetamol', 'acetaminophen', 'tylenol', 'panadol', 'fever', 'pain'],
-                category: 'Analgesic / Antipyretic'
+        // Drug database - loaded from drugs-list.json
+        let drugs = [];
+        
+        // Load drugs list on page load
+        async function loadDrugsList() {
+            try {
+                const response = await fetch('data/drugs-list.json');
+                drugs = await response.json();
+                console.log(`Loaded ${drugs.length} drugs`);
+            } catch (error) {
+                console.error('Error loading drugs list:', error);
+                alert('Error loading drug database. Please refresh the page.');
             }
-        ];
+        }
+        
+        // Initialize on page load
+        loadDrugsList();
         
         const ageGroupsDisplay = {
             'neonates': { label: '👶 Newborn', range: '0-28 days' },
