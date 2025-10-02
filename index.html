@@ -826,10 +826,51 @@
             
             // Display indication-based results
             displayIndicationBasedResult(doseText, dosing, routeData, weight);
+            displayIndicationFormulations(calculatedDose || weight);
             displayIndicationWarnings();
             displaySources();
             
             document.getElementById('results').classList.add('show');
+        }
+        
+        function displayIndicationFormulations(weight) {
+            const formulations = currentDrugData.formulations;
+            if (!formulations) return;
+            
+            let html = '<h4>💊 Formulation Available:</h4>';
+            
+            // Find appropriate formulation
+            const injection = formulations.find(f => f.type === 'Injection');
+            if (injection && (selectedRoute === 'IV' || selectedRoute === 'Rectal')) {
+                const routeData = currentIndication.routes.find(r => r.route === selectedRoute);
+                const dosing = routeData.dosing;
+                
+                // Calculate ml needed
+                if (dosing.calculation) {
+                    const match = dosing.calculation.match(/([\d.]+)(?:-([\d.]+))?\s*mg\/kg/);
+                    if (match) {
+                        const dosePerKg = dosing.preferredDose || parseFloat(match[2] || match[1]);
+                        let totalMg = weight * dosePerKg;
+                        
+                        if (dosing.maxSingleDose && totalMg > dosing.maxSingleDose) {
+                            totalMg = dosing.maxSingleDose;
+                        }
+                        
+                        const mgPerMl = parseFloat(injection.concentration.split('mg/ml')[0]);
+                        const mlNeeded = totalMg / mgPerMl;
+                        
+                        html += `
+                            <div class="formulation-option">
+                                <strong>✅ ${injection.type} ${injection.concentration}</strong><br>
+                                → Give ${mlNeeded.toFixed(2)} ml (${totalMg.toFixed(1)} mg)
+                                ${injection.notes ? `<div class="formulation-note">${injection.notes}</div>` : ''}
+                            </div>
+                        `;
+                    }
+                }
+            }
+            
+            document.getElementById('formulationsSection').innerHTML = html;
         }
         
         function displayIndicationBasedResult(doseText, dosing, routeData, weight) {
@@ -922,6 +963,12 @@
         }
         
         function displayFormulations(calculatedDose) {
+            // Only for weight-based drugs
+            if (currentDrugData.calculationType !== 'weight-based') {
+                displayIndicationFormulations(calculatedDose);
+                return;
+            }
+            
             const formulations = currentDrugData.formulations;
             let html = '<h4>💊 How to Administer:</h4>';
             
