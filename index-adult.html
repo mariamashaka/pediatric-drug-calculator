@@ -1,1 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adult Drug Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💊 Adult Drug Calculator</h1>
+            <p class="subtitle">Evidence-based dosing for adult patients (18+ years)</p>
+        </header>
+        
+        <div class="content">
+            <!-- Search -->
+            <div class="search-wrapper">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="🔍 Search drug by name..."
+                    autocomplete="off"
+                >
+                <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+            </div>
+            
+            <!-- Drug Info -->
+            <div class="drug-info" id="drugInfo">
+                <h2 id="drugName"></h2>
+                <p id="drugCategory"></p>
+            </div>
+            
+            <!-- Calculator Form -->
+            <form class="calculator-form" id="calculatorForm">
+                <div class="input-group">
+                    <label for="weight">Patient Weight (kg):</label>
+                    <input type="number" id="weight" placeholder="Enter weight..." min="40" step="0.1" required>
+                </div>
+                
+                <button type="submit" class="btn">Calculate Dose</button>
+            </form>
+            
+            <!-- Results -->
+            <div class="results" id="results">
+                <h3>📋 Dosing Results</h3>
+                
+                <div class="dose-result" id="doseResult">
+                    <p>This section will be developed by Juma for adult medications.</p>
+                </div>
+                
+                <div class="sources" id="sources"></div>
+            </div>
+            
+            <!-- Back to main -->
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="index.html" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to main page</a>
+            </div>
+        </div>
+        
+        <footer>
+            © 2025 Drug Dosage Calculator<br>
+            <strong>Developed by Dr. Mariia Rukavishnikova & RN Ally Juma Ngozoma</strong>
+        </footer>
+    </div>
 
+    <script>
+        // Adult drug calculator - to be developed by Juma
+        // This is a template file
+        
+        let drugs = [];
+        let selectedDrug = null;
+        let currentDrugData = null;
+        
+        // Load drugs list for adults
+        async function loadDrugsList() {
+            try {
+                const response = await fetch('data/adult/drugs-list.json');
+                drugs = await response.json();
+                console.log(`Loaded ${drugs.length} adult drugs`);
+            } catch (error) {
+                console.error('Error loading drugs list:', error);
+                // If no drugs yet, show message
+                document.getElementById('searchInput').placeholder = '🔍 Adult drug database coming soon...';
+            }
+        }
+        
+        // Initialize
+        loadDrugsList();
+        
+        // Autocomplete
+        const searchInput = document.getElementById('searchInput');
+        const autocompleteDropdown = document.getElementById('autocompleteDropdown');
+        
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            
+            if (query.length < 2) {
+                autocompleteDropdown.classList.remove('show');
+                return;
+            }
+            
+            const matches = drugs.filter(drug => 
+                drug.searchTerms && drug.searchTerms.some(term => term.includes(query))
+            );
+            
+            if (matches.length > 0) {
+                autocompleteDropdown.innerHTML = matches.map(drug => `
+                    <div class="autocomplete-item" onclick="selectDrug('${drug.id}')">
+                        <strong>${drug.name}</strong>
+                        <small>${drug.category}</small>
+                    </div>
+                `).join('');
+                autocompleteDropdown.classList.add('show');
+            } else {
+                autocompleteDropdown.innerHTML = '<div class="autocomplete-item">No drugs found</div>';
+                autocompleteDropdown.classList.add('show');
+            }
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-wrapper')) {
+                autocompleteDropdown.classList.remove('show');
+            }
+        });
+        
+        // Select drug
+        async function selectDrug(drugId) {
+            selectedDrug = drugs.find(d => d.id === drugId);
+            if (!selectedDrug) return;
+            
+            autocompleteDropdown.classList.remove('show');
+            searchInput.value = selectedDrug.name;
+            
+            try {
+                const response = await fetch(`data/adult/${drugId}.json`);
+                currentDrugData = await response.json();
+                
+                document.getElementById('drugName').textContent = currentDrugData.drugName;
+                document.getElementById('drugCategory').textContent = currentDrugData.category;
+                document.getElementById('drugInfo').classList.add('show');
+                
+                document.getElementById('calculatorForm').classList.add('show');
+                document.getElementById('results').classList.remove('show');
+                
+            } catch (error) {
+                alert('Error loading drug data. Please try again.');
+                console.error(error);
+            }
+        }
+        
+        // Calculate (placeholder)
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const weight = parseFloat(document.getElementById('weight').value);
+            
+            if (!weight || weight <= 0) {
+                alert('Please enter a valid weight!');
+                return;
+            }
+            
+            // Placeholder - Juma will implement actual calculation
+            document.getElementById('doseResult').innerHTML = `
+                <p>Weight: ${weight} kg</p>
+                <p><em>Calculation logic to be implemented for adult medications.</em></p>
+            `;
+            
+            document.getElementById('results').classList.add('show');
+        });
+    </script>
+</body>
+</html>
