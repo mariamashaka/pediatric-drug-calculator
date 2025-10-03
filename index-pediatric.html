@@ -413,6 +413,39 @@
             margin-top: 0;
         }
         
+        .btn-more-info {
+            background: #2196f3;
+            margin-top: 15px;
+        }
+        
+        .more-info-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #2196f3;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .more-info-section.show {
+            display: block;
+        }
+        
+        .more-info-section h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .more-info-section ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+        
+        .more-info-section li {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
         /* Footer */
         footer {
             background: #f5f5f5;
@@ -492,13 +525,29 @@
                 
                 <div class="sources" id="sources"></div>
                 
+                <button class="btn btn-more-info" onclick="toggleMoreInfo()">ℹ️ More Information</button>
+                
+                <div class="more-info-section" id="moreInfoSection">
+                    <h4>📋 Indications:</h4>
+                    <ul id="indicationsList"></ul>
+                    
+                    <h4>⚠️ Contraindications:</h4>
+                    <ul id="contraindicationsList"></ul>
+                    
+                    <h4>💊 Side Effects:</h4>
+                    <ul id="sideEffectsList"></ul>
+                    
+                    <h4>🔄 Drug Interactions:</h4>
+                    <ul id="interactionsList"></ul>
+                </div>
+                
                 <button class="btn btn-print" onclick="printPrescription()">🖨️ Print Prescription</button>
             </div>
         </div>
         
         <footer>
-            © 2025 Pediatric Drug Calculator<br>
-            <strong>Developed by Dr. Mariia Rukavishnikova</strong>
+            © 2025 Drug Dosage Calculator<br>
+            <strong>Developed by Dr. Mariia Rukavishnikova & RN Ally Juma Ngozoma</strong>
         </footer>
     </div>
 
@@ -509,7 +558,7 @@
         // Load drugs list on page load
         async function loadDrugsList() {
             try {
-                const response = await fetch('data/drugs-list.json');
+                const response = await fetch('data/pediatric/drugs-list.json');
                 drugs = await response.json();
                 console.log(`Loaded ${drugs.length} drugs`);
             } catch (error) {
@@ -582,7 +631,7 @@
             searchInput.value = selectedDrug.name;
             
             try {
-                const response = await fetch(`data/${drugId}.json`);
+                const response = await fetch(`data/pediatric/${drugId}.json`);
                 currentDrugData = await response.json();
                 
                 document.getElementById('drugName').textContent = currentDrugData.drugName;
