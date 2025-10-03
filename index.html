@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -797,7 +797,25 @@
             let doseText = '';
             
             // Calculate based on dosing type
-            if (dosing.calculation) {
+            if (dosing.adolescent && selectedAge === 'adolescent') {
+                // Fixed dose for adolescents
+                doseText = dosing.adolescent.fixedDose;
+            } else if (dosing.children) {
+                // Weight-based for children
+                const match = dosing.children.calculation.match(/([\d.]+)(?:-([\d.]+))?\s*mg\/kg/);
+                if (match) {
+                    const minDose = parseFloat(match[1]);
+                    const maxDose = match[2] ? parseFloat(match[2]) : minDose;
+                    
+                    calculatedDose = weight * maxDose;
+                    
+                    if (dosing.children.maxSingleDose && calculatedDose > dosing.children.maxSingleDose) {
+                        calculatedDose = dosing.children.maxSingleDose;
+                    }
+                    
+                    doseText = `${calculatedDose.toFixed(1)} mg (${weight} kg × ${maxDose} mg/kg, max ${dosing.children.maxSingleDose} mg)`;
+                }
+            } else if (dosing.calculation) {
                 // Standard mg/kg calculation
                 const match = dosing.calculation.match(/([\d.]+)(?:-([\d.]+))?\s*mg\/kg/);
                 if (match) {
