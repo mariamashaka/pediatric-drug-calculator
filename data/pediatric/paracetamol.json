@@ -136,6 +136,105 @@
     "Use caution in malnutrition or dehydration"
   ],
   
+  "criticalWarningsConfig": {
+    "neonates": {
+      "showInMain": true,
+      "warnings": [
+        "10 mg/kg ONLY (NOT 15 mg/kg)",
+        "Maximum every 6 hours due to slower clearance",
+        "Do NOT use for hyperthermia",
+        "Use ONLY for pain with senior approval or PDA closure",
+        "Always consult neonatologist"
+      ],
+      "indications": {
+        "allowed": ["Pain management (with senior approval)", "PDA closure (pharmacological attempt - consult cardiology)"],
+        "contraindicated": ["Hyperthermia (do NOT use to reduce body temperature in neonates)"]
+      }
+    },
+    "infants": {
+      "showInMain": false
+    },
+    "toddlers": {
+      "showInMain": false
+    },
+    "preschool": {
+      "showInMain": false
+    },
+    "schoolAge": {
+      "showInMain": false
+    },
+    "adolescent": {
+      "showInMain": false
+    }
+  },
+  
+  "moreInformation": {
+    "dosingRationale": "Standard dose range is 10-15 mg/kg per dose. We recommend 15 mg/kg for optimal antipyretic and analgesic effect while remaining within safe limits.",
+    
+    "ageSpecificInfo": {
+      "neonates": {
+        "specialDosing": "10 mg/kg every 6-8 hours (maximum 4 doses per day)",
+        "warnings": [
+          "Slower hepatic metabolism in neonates",
+          "Reduced clearance - do not dose more frequently than every 6 hours",
+          "Monitor for signs of toxicity"
+        ],
+        "notes": "Reduced dose due to immature liver metabolism"
+      },
+      "infants": {
+        "specialDosing": "10-15 mg/kg every 4-6 hours",
+        "notes": "Standard pediatric dosing applies"
+      },
+      "toddlers": {
+        "notes": "Standard pediatric dosing applies"
+      },
+      "preschool": {
+        "notes": "Standard pediatric dosing applies"
+      },
+      "schoolAge": {
+        "notes": "May use adult formulations with appropriate dose adjustment"
+      },
+      "adolescent": {
+        "notes": "Adult dosing may apply for patients >50kg (maximum 1000mg per dose)"
+      }
+    },
+    
+    "sideEffects": {
+      "common": ["Nausea (rare at therapeutic doses)", "Rash (rare)"],
+      "serious": [
+        "Hepatotoxicity (with overdose or chronic excessive use)",
+        "Acute kidney injury (high doses, dehydration)",
+        "Severe skin reactions (Stevens-Johnson syndrome - very rare)"
+      ],
+      "rare": ["Blood disorders (thrombocytopenia, neutropenia)", "Hypersensitivity reactions"]
+    },
+    
+    "drugInteractions": [
+      {
+        "drug": "Warfarin",
+        "effect": "May increase INR with regular use (>2g/day for several days)",
+        "management": "Monitor INR if using paracetamol regularly"
+      },
+      {
+        "drug": "Alcohol",
+        "effect": "Chronic alcohol use increases risk of hepatotoxicity",
+        "management": "Use with caution in chronic alcohol users"
+      },
+      {
+        "drug": "Carbamazepine, Phenytoin, Rifampicin",
+        "effect": "Enzyme inducers may increase risk of toxicity",
+        "management": "Use lower doses, monitor liver function"
+      }
+    ],
+    
+    "overdose": {
+      "antidote": "N-acetylcysteine (NAC)",
+      "protocol": "Most effective if given within 8 hours of ingestion. Can be beneficial up to 24 hours.",
+      "dosing": "Loading dose: 150 mg/kg IV over 1 hour, then maintenance doses (consult toxicology protocol)",
+      "signs": "Early: Nausea, vomiting, pallor. Late (24-72h): Hepatotoxicity, jaundice, coagulopathy"
+    }
+  },
+  
   "formulations": [
     {
       "type": "Syrup",
