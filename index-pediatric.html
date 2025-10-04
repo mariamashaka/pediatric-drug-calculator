@@ -528,17 +528,7 @@
                 <button class="btn btn-more-info" onclick="toggleMoreInfo()">ℹ️ More Information</button>
                 
                 <div class="more-info-section" id="moreInfoSection">
-                    <h4>📋 Indications:</h4>
-                    <ul id="indicationsList"></ul>
-                    
-                    <h4>⚠️ Contraindications:</h4>
-                    <ul id="contraindicationsList"></ul>
-                    
-                    <h4>💊 Side Effects:</h4>
-                    <ul id="sideEffectsList"></ul>
-                    
-                    <h4>🔄 Drug Interactions:</h4>
-                    <ul id="interactionsList"></ul>
+                    <!-- Content loaded dynamically by loadMoreInformation() -->
                 </div>
                 
                 <button class="btn btn-print" onclick="printPrescription()">🖨️ Print Prescription</button>
@@ -1105,8 +1095,32 @@
         
         function displayWarnings() {
             const warningBox = document.getElementById('warningBox');
-            const ageData = currentDrugData.ageGroups[selectedAge];
             
+            // Check for critical warnings config
+            if (currentDrugData.criticalWarningsConfig) {
+                const config = currentDrugData.criticalWarningsConfig[selectedAge];
+                
+                if (config && config.showInMain === true) {
+                    let html = '<h4>⚠️ Critical Warnings:</h4><ul>';
+                    
+                    config.warnings.forEach(w => {
+                        html += `<li>${w}</li>`;
+                    });
+                    
+                    if (config.indications) {
+                        html += `<li class="indication">✅ INDICATIONS: ${config.indications.allowed.join('; ')}</li>`;
+                        html += `<li class="contraindication">❌ CONTRAINDICATIONS: ${config.indications.contraindicated.join('; ')}</li>`;
+                    }
+                    
+                    html += '</ul>';
+                    warningBox.innerHTML = html;
+                    warningBox.className = 'warning-box neonatal-box show';
+                    return;
+                }
+            }
+            
+            // Fallback to old logic for drugs without new structure
+            const ageData = currentDrugData.ageGroups[selectedAge];
             if (selectedAge === 'neonates' && currentDrugData.dosing.neonatal) {
                 const neonatalDosing = currentDrugData.dosing.neonatal;
                 let html = `<h4>⚠️ NEONATAL DOSING (0-28 days):</h4><ul>`;
@@ -1125,7 +1139,7 @@
                 html += `</ul>`;
                 warningBox.innerHTML = html;
                 warningBox.className = 'warning-box neonatal-box show';
-            } else if (ageData.cautionLevel === 'high' || ageData.cautionLevel === 'medium') {
+            } else if (ageData && (ageData.cautionLevel === 'high' || ageData.cautionLevel === 'medium')) {
                 warningBox.innerHTML = `<h4>⚠️ Warning:</h4><ul><li>${ageData.notes}</li></ul>`;
                 warningBox.className = 'warning-box show';
             } else {
