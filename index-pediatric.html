@@ -1202,6 +1202,72 @@ function displayDoseResult(dose, maxDaily, dosing, weight) {
             `);
             printWindow.document.close();
             printWindow.print();
+            // Toggle more information section
+function toggleMoreInfo() {
+    const moreInfoSection = document.getElementById('moreInfoSection');
+    moreInfoSection.classList.toggle('show');
+    
+    if (moreInfoSection.classList.contains('show')) {
+        loadMoreInformation();
+    }
+}
+
+// Load more information content
+function loadMoreInformation() {
+    if (!currentDrugData || !currentDrugData.moreInformation) return;
+    
+    const moreInfoSection = document.getElementById('moreInfoSection');
+    const info = currentDrugData.moreInformation;
+    
+    let html = '<h4>📚 Additional Information</h4>';
+    
+    // Dosing Rationale
+    if (info.dosingRationale) {
+        html += `<p><strong>Dosing Rationale:</strong> ${info.dosingRationale}</p>`;
+    }
+    
+    // Age-specific info
+    if (info.ageSpecificInfo && info.ageSpecificInfo[selectedAge]) {
+        const ageInfo = info.ageSpecificInfo[selectedAge];
+        html += `<p><strong>Age-Specific Notes:</strong> ${ageInfo.notes || ''}</p>`;
+        if (ageInfo.specialDosing) {
+            html += `<p><strong>Special Dosing:</strong> ${ageInfo.specialDosing}</p>`;
+        }
+    }
+    
+    // Side Effects
+    if (info.sideEffects) {
+        html += `<div class="info-section">
+            <strong>💊 Side Effects:</strong>
+            <ul>
+                ${info.sideEffects.common ? info.sideEffects.common.map(effect => `<li>${effect}</li>`).join('') : ''}
+            </ul>
+        </div>`;
+    }
+    
+    // Drug Interactions
+    if (info.drugInteractions && info.drugInteractions.length > 0) {
+        html += `<div class="info-section">
+            <strong>⚡ Drug Interactions:</strong>
+            <ul>
+                ${info.drugInteractions.map(interaction => 
+                    `<li><strong>${interaction.drug}:</strong> ${interaction.effect}${interaction.management ? ` (${interaction.management})` : ''}</li>`
+                ).join('')}
+            </ul>
+        </div>`;
+    }
+    
+    // Overdose info
+    if (info.overdose) {
+        html += `<div class="info-section">
+            <strong>🚨 Overdose Management:</strong>
+            <p><strong>Antidote:</strong> ${info.overdose.antidote || 'N/A'}</p>
+            <p><strong>Protocol:</strong> ${info.overdose.protocol || ''}</p>
+        </div>`;
+    }
+    
+    moreInfoSection.innerHTML = html;
+}
         }
     </script>
 </body>
