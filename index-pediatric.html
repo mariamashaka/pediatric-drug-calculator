@@ -999,25 +999,16 @@
             }
         }
         
-        function displayDoseResult(dose, maxDaily, dosing, weight) {
-            const html = `
-                <h4>📊 Calculated Dose for this Patient:</h4>
-                <p><strong>Single Dose:</strong> ${dose.toFixed(0)} mg</p>
-                <p><strong>Frequency:</strong> ${dosing.frequency}</p>
-                <p><strong>Maximum Daily Dose:</strong> ${maxDaily.toFixed(0)} mg/day (max ${dosing.maxFrequencyPerDay}× per day)</p>
-                <p><strong>Calculation:</strong> ${weight} kg × ${dosing.preferred} mg/kg = ${dose.toFixed(0)} mg</p>
-                
-                <div class="dose-info">
-                    <strong>ℹ️ Dosing Information:</strong>
-                    <ul>
-                        <li>Standard dose range: ${dosing.calculation}</li>
-                        <li>Recommended: ${dosing.preferred} mg/kg ${dosing.notes ? '(' + dosing.notes + ')' : ''}</li>
-                        <li>Do not exceed maximum doses</li>
-                    </ul>
-                </div>
-            `;
-            document.getElementById('doseResult').innerHTML = html;
-        }
+function displayDoseResult(dose, maxDaily, dosing, weight) {
+    const html = `
+        <h4>📊 Calculated Dose:</h4>
+        <p><strong>Single Dose:</strong> ${dose.toFixed(0)} mg</p>
+        <p><strong>Frequency:</strong> ${dosing.frequency}</p>
+        <p><strong>Maximum Daily Dose:</strong> ${maxDaily.toFixed(0)} mg</p>
+        <p><strong>Calculation:</strong> ${weight} kg × ${dosing.preferred} mg/kg</p>
+    `;
+    document.getElementById('doseResult').innerHTML = html;
+}
         
         function displayFormulations(calculatedDose) {
             // Only for weight-based drugs
