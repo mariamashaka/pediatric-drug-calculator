@@ -470,20 +470,20 @@
             }
         }
         .info-section {
-    margin: 15px 0;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 5px;
-}
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
 
-.info-section ul {
-    margin: 5px 0 5px 20px;
-}
+        .info-section ul {
+            margin: 5px 0 5px 20px;
+        }
 
-.info-section li {
-    margin: 3px 0;
-    font-size: 13px;
-}
+        .info-section li {
+            margin: 3px 0;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -1014,16 +1014,16 @@
             }
         }
         
-function displayDoseResult(dose, maxDaily, dosing, weight) {
-    const html = `
-        <h4>📊 Calculated Dose:</h4>
-        <p><strong>Single Dose:</strong> ${dose.toFixed(0)} mg</p>
-        <p><strong>Frequency:</strong> ${dosing.frequency}</p>
-        <p><strong>Maximum Daily Dose:</strong> ${maxDaily.toFixed(0)} mg</p>
-        <p><strong>Calculation:</strong> ${weight} kg × ${dosing.preferred} mg/kg</p>
-    `;
-    document.getElementById('doseResult').innerHTML = html;
-}
+        function displayDoseResult(dose, maxDaily, dosing, weight) {
+            const html = `
+                <h4>📊 Calculated Dose:</h4>
+                <p><strong>Single Dose:</strong> ${dose.toFixed(0)} mg</p>
+                <p><strong>Frequency:</strong> ${dosing.frequency}</p>
+                <p><strong>Maximum Daily Dose:</strong> ${maxDaily.toFixed(0)} mg</p>
+                <p><strong>Calculation:</strong> ${weight} kg × ${dosing.preferred} mg/kg</p>
+            `;
+            document.getElementById('doseResult').innerHTML = html;
+        }
         
         function displayFormulations(calculatedDose) {
             // Only for weight-based drugs
@@ -1082,16 +1082,8 @@ function displayDoseResult(dose, maxDaily, dosing, weight) {
                 html += `→ Give ${best.fractionText} tablet (${best.mg} mg - ⚠️ exceeds dose by ${(best.mg - dose).toFixed(0)} mg)<br>`;
                 hasWarning = true;
             } else {
-                html += `→ Give ${best.fractionText} tablet (${best.mg} mg - exact dose)<br>`;
-            }
-            
-            if (second && second.diff < dose * 0.3) {
-                html += `→ Or give ${second.fractionText} tablet (${second.mg} mg`;
-                if (second.mg > dose) {
-                    html += ` - ⚠️ exceeds dose by ${(second.mg - dose).toFixed(0)} mg`;
-                    hasWarning = true;
-                }
-                html += `)<br>`;
+                html += `→ Give ${best.fractionText} tablet (${best.mg} mg
+                            html += `)<br>`;
             }
             
             html += `<div class="formulation-note">⚠️ Do not exceed calculated dose</div>`;
@@ -1169,6 +1161,73 @@ function displayDoseResult(dose, maxDaily, dosing, weight) {
             document.getElementById('sources').innerHTML = html;
         }
         
+        // Toggle more information section
+        function toggleMoreInfo() {
+            const moreInfoSection = document.getElementById('moreInfoSection');
+            moreInfoSection.classList.toggle('show');
+            
+            if (moreInfoSection.classList.contains('show')) {
+                loadMoreInformation();
+            }
+        }
+
+        // Load more information content
+        function loadMoreInformation() {
+            if (!currentDrugData || !currentDrugData.moreInformation) return;
+            
+            const moreInfoSection = document.getElementById('moreInfoSection');
+            const info = currentDrugData.moreInformation;
+            
+            let html = '<h4>📚 Additional Information</h4>';
+            
+            // Dosing Rationale
+            if (info.dosingRationale) {
+                html += `<p><strong>Dosing Rationale:</strong> ${info.dosingRationale}</p>`;
+            }
+            
+            // Age-specific info
+            if (info.ageSpecificInfo && info.ageSpecificInfo[selectedAge]) {
+                const ageInfo = info.ageSpecificInfo[selectedAge];
+                html += `<p><strong>Age-Specific Notes:</strong> ${ageInfo.notes || ''}</p>`;
+                if (ageInfo.specialDosing) {
+                    html += `<p><strong>Special Dosing:</strong> ${ageInfo.specialDosing}</p>`;
+                }
+            }
+            
+            // Side Effects
+            if (info.sideEffects) {
+                html += `<div class="info-section">
+                    <strong>💊 Side Effects:</strong>
+                    <ul>
+                        ${info.sideEffects.common ? info.sideEffects.common.map(effect => `<li>${effect}</li>`).join('') : ''}
+                    </ul>
+                </div>`;
+            }
+            
+            // Drug Interactions
+            if (info.drugInteractions && info.drugInteractions.length > 0) {
+                html += `<div class="info-section">
+                    <strong>⚡ Drug Interactions:</strong>
+                    <ul>
+                        ${info.drugInteractions.map(interaction => 
+                            `<li><strong>${interaction.drug}:</strong> ${interaction.effect}${interaction.management ? ` (${interaction.management})` : ''}</li>`
+                        ).join('')}
+                    </ul>
+                </div>`;
+            }
+            
+            // Overdose info
+            if (info.overdose) {
+                html += `<div class="info-section">
+                    <strong>🚨 Overdose Management:</strong>
+                    <p><strong>Antidote:</strong> ${info.overdose.antidote || 'N/A'}</p>
+                    <p><strong>Protocol:</strong> ${info.overdose.protocol || ''}</p>
+                </div>`;
+            }
+            
+            moreInfoSection.innerHTML = html;
+        }
+        
         function printPrescription() {
             const weight = document.getElementById('weight').value;
             const drugName = currentDrugData.drugName;
@@ -1217,72 +1276,6 @@ function displayDoseResult(dose, maxDaily, dosing, weight) {
             `);
             printWindow.document.close();
             printWindow.print();
-            // Toggle more information section
-function toggleMoreInfo() {
-    const moreInfoSection = document.getElementById('moreInfoSection');
-    moreInfoSection.classList.toggle('show');
-    
-    if (moreInfoSection.classList.contains('show')) {
-        loadMoreInformation();
-    }
-}
-
-// Load more information content
-function loadMoreInformation() {
-    if (!currentDrugData || !currentDrugData.moreInformation) return;
-    
-    const moreInfoSection = document.getElementById('moreInfoSection');
-    const info = currentDrugData.moreInformation;
-    
-    let html = '<h4>📚 Additional Information</h4>';
-    
-    // Dosing Rationale
-    if (info.dosingRationale) {
-        html += `<p><strong>Dosing Rationale:</strong> ${info.dosingRationale}</p>`;
-    }
-    
-    // Age-specific info
-    if (info.ageSpecificInfo && info.ageSpecificInfo[selectedAge]) {
-        const ageInfo = info.ageSpecificInfo[selectedAge];
-        html += `<p><strong>Age-Specific Notes:</strong> ${ageInfo.notes || ''}</p>`;
-        if (ageInfo.specialDosing) {
-            html += `<p><strong>Special Dosing:</strong> ${ageInfo.specialDosing}</p>`;
-        }
-    }
-    
-    // Side Effects
-    if (info.sideEffects) {
-        html += `<div class="info-section">
-            <strong>💊 Side Effects:</strong>
-            <ul>
-                ${info.sideEffects.common ? info.sideEffects.common.map(effect => `<li>${effect}</li>`).join('') : ''}
-            </ul>
-        </div>`;
-    }
-    
-    // Drug Interactions
-    if (info.drugInteractions && info.drugInteractions.length > 0) {
-        html += `<div class="info-section">
-            <strong>⚡ Drug Interactions:</strong>
-            <ul>
-                ${info.drugInteractions.map(interaction => 
-                    `<li><strong>${interaction.drug}:</strong> ${interaction.effect}${interaction.management ? ` (${interaction.management})` : ''}</li>`
-                ).join('')}
-            </ul>
-        </div>`;
-    }
-    
-    // Overdose info
-    if (info.overdose) {
-        html += `<div class="info-section">
-            <strong>🚨 Overdose Management:</strong>
-            <p><strong>Antidote:</strong> ${info.overdose.antidote || 'N/A'}</p>
-            <p><strong>Protocol:</strong> ${info.overdose.protocol || ''}</p>
-        </div>`;
-    }
-    
-    moreInfoSection.innerHTML = html;
-}
         }
     </script>
 </body>
